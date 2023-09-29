@@ -1,0 +1,9 @@
+uvicorn
+fastapi
+starlette
+sqlmodel
+typing_extensions
+starlette
+asyncpg
+bcrypt
+pyjwt

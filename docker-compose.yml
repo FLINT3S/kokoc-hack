@@ -6,3 +6,15 @@ services:
     image: siailyadev/kokoc-hack-client:0.0.1b1
     ports:
       - '3000:80'
+  server:
+    container_name: server
+    image: mindlessdoc/kokoc-hack-server:0.0.1
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      STRAPI_URL:
+      STRAPI_LOGIN:
+      STRAPI_PASSWORD:
+    depends_on:
+      - strapi-service
