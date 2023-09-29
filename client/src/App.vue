@@ -11,9 +11,7 @@
           <transition mode="out-in" name="fade">
             <component :is="layout">
               <router-view v-slot="{ Component }">
-                <transition :name="transitionName" mode="out-in">
                   <component :is="Component"/>
-                </transition>
               </router-view>
             </component>
           </transition>
@@ -30,19 +28,20 @@ import {darkTheme, dateRuRU, lightTheme, ruRU} from "naive-ui";
 
 import themeOverrides from "@/app/style/naive-ui-theme-overrides.json"
 import EmptyLayout from "@components/layout/EmptyLayout.vue";
+import {userUserStore} from "@data/store/userStore.ts";
 
 const route = useRoute()
+const userStore = userUserStore()
+
 
 const layout = computed(() => {
   return route.meta?.layout as Component ?? EmptyLayout
 })
 
-const transitionName = computed(() => {
-  return layout.value === EmptyLayout ? '' : 'fade'
+const appTheme = computed(() => {
+  return userStore.theme === 'light' ? lightTheme : darkTheme
 })
 
-const appTheme = computed(() => {
-  return 'light' === 'light' ? lightTheme : darkTheme
-})
+userStore.initTheme()
 </script>
 

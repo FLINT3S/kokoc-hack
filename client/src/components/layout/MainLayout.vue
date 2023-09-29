@@ -2,20 +2,17 @@
   <n-layout style="height: 100vh">
     <n-layout-header bordered style="height: 64px; padding: 2px">
       <section class="container py-2 d-flex justify-content-between align-items-center">
-        <router-link class="d-flex text-decoration-none" to="/">
-          <div class="text-center my-auto lh-1 ms-2">
-            <h1 class="app-title my-0">
-              FitApp
-            </h1>
-          </div>
-        </router-link>
-
-        <menu class="m-0 p-0 d-flex gap-3">
-
-        </menu>
+        <div class="text-center my-auto lh-1 ms-2" @click="$router.push('/')">
+          <h1 class="app-title my-0">
+            <CMLogo :icon-width="42" class="top-bar-logo"/>
+          </h1>
+        </div>
 
         <div class="d-flex align-items-center">
-
+          <n-button @click="userStore.toggleTheme()">
+            <n-icon v-if="userStore.theme === 'dark'" :component="LightModeFilled"/>
+            <n-icon v-else :component="DarkModeFilled"/>
+          </n-button>
         </div>
       </section>
     </n-layout-header>
@@ -26,12 +23,14 @@
         style="top: 64px; bottom: 64px; height: calc(100% - 64px)"
     >
       <n-layout-sider
-          show-trigger
           :native-scrollbar="false"
           bordered
-          content-style="padding: 24px;"
+          show-trigger
+          :collapsed-width="64"
+          collapse-mode="width"
+          v-model:collapsed="isMenuCollapsed"
       >
-        <p v-for="i in 100">{{ i }}</p>
+        <SideMenu :collapsed="isMenuCollapsed"/>
       </n-layout-sider>
 
       <n-layout
@@ -62,4 +61,18 @@
 </template>
 
 <script lang="ts" setup>
+import CMLogo from "@components/CMLogo.vue";
+import SideMenu from "@components/menu/SideMenu.vue";
+import {DarkModeFilled, LightModeFilled} from '@vicons/material'
+import {userUserStore} from "@data/store/userStore.ts";
+
+const userStore = userUserStore()
+
+const isMenuCollapsed = ref(false);
 </script>
+
+<style>
+.top-bar-logo h1 {
+  font-size: 24px;
+}
+</style>
