@@ -1,0 +1,17 @@
+:root {
+    --accent-primary: #F6664B;
+}
+
+.accent-text {
+    color: var(--accent-primary)
+}
+
+.card-md {
+    max-width: 768px;
+}
+
+@media screen and (min-width: 992px) {
+    .card-md {
+        max-width: 576px;
+    }
+}
