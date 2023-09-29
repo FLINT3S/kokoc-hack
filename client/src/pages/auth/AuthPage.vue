@@ -14,7 +14,7 @@ import CMLogo from "@components/CMLogo.vue";
 
 <style scoped>
 .auth-page {
-  height: calc(100vh - 24px);
+  min-height: calc(100vh - 24px);
   padding: 12px;
   display: flex;
   justify-content: center;

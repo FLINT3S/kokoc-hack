@@ -9,7 +9,7 @@
 
   <n-tabs type="segment">
     <n-tab-pane name="oasis" tab="Пользователь">
-      Пользователь
+      <UserRegistration/>
     </n-tab-pane>
     <n-tab-pane name="the beatles" tab="Администратор">
       Администратор
@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-
+import UserRegistration from "@components/auth/UserRegistration.vue";
 </script>
 
 <style scoped>
