@@ -12,9 +12,3 @@ services:
     restart: always
     ports:
       - "5000:5000"
-    environment:
-      STRAPI_URL:
-      STRAPI_LOGIN:
-      STRAPI_PASSWORD:
-    depends_on:
-      - strapi-service

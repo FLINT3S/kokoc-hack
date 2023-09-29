@@ -5,6 +5,7 @@ from services.service import APIService
 api = APIService()
 
 
+
 @api.app.get("/api/status")
 async def root():
     return {"status": "OK"}
