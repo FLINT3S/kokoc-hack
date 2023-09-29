@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, onMounted, reactive, ref, watch} from 'vue'
+import {computed, reactive} from 'vue'
 import {FormRules} from "naive-ui";
 import {VisibilityFilled, VisibilityOffFilled} from "@vicons/material"
 import {axiosInstance} from "@data/api/axiosInstance.ts";
@@ -59,7 +59,7 @@ const isSubmitDisabled = computed(() => {
 const userRegistrationRules: FormRules = {
   title: [{required: true, message: 'Нужно заполнить это поле', trigger: ['input', 'blur']}],
   login: [{required: true, message: 'Нужно заполнить это поле', trigger: ['input', 'blur']}, {
-    validator(rule: any, value: string) {
+    validator(_: any, value: string) {
       if (!/^[A-z0-9_]*$/.test(value)) {
         return new Error('Логин должен состоять из латинских букв, цифр и символа нижнего подчеркивания')
       }
@@ -69,7 +69,7 @@ const userRegistrationRules: FormRules = {
   }],
   password: [{required: true, message: 'Нужно заполнить это поле', trigger: ['input', 'blur']}],
   passwordReenter: [{required: true, message: 'Нужно заполнить это поле', trigger: ['input', 'blur']}, {
-    validator(rule: any, value: string) {
+    validator() {
       if (fundRegistrationData.password !== fundRegistrationData.passwordReenter) {
         return new Error('Пароли не совпадают')
       }

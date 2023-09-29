@@ -4,7 +4,11 @@ import AuthPage from "@/pages/auth/AuthPage.vue";
 import MainLayout from "@components/layout/MainLayout.vue";
 import RegisterPage from "@/pages/auth/RegisterPage.vue";
 import LoginPage from "@/pages/auth/LoginPage.vue";
-import EmptyLayout from "@components/layout/EmptyLayout.vue";
+import MyCompanyPage from "@/pages/MyCompanyPage.vue";
+import PersonalPage from "@/pages/PersonalPage.vue";
+import LeaderBoardPage from "@/pages/LeaderBoardPage.vue";
+import CompaniesPage from "@/pages/CompaniesPage.vue";
+import FundsPage from "@/pages/FundsPage.vue";
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -31,35 +35,35 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/mycompany',
-    component: EmptyLayout,
+    component: MyCompanyPage,
     meta: {
       layout: MainLayout
     }
   },
   {
     path: '/personal',
-    component: EmptyLayout,
+    component: PersonalPage,
     meta: {
       layout: MainLayout
     }
   },
   {
     path: '/leaderboard',
-    component: EmptyLayout,
+    component: LeaderBoardPage,
     meta: {
       layout: MainLayout
     }
   },
   {
     path: '/companies',
-    component: EmptyLayout,
+    component: CompaniesPage,
     meta: {
       layout: MainLayout
     }
   },
   {
     path: '/funds',
-    component: EmptyLayout,
+    component: FundsPage,
     meta: {
       layout: MainLayout
     }

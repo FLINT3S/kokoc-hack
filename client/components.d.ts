@@ -25,16 +25,13 @@ declare module 'vue' {
     NLayoutFooter: typeof import('naive-ui')['NLayoutFooter']
     NLayoutHeader: typeof import('naive-ui')['NLayoutHeader']
     NLayoutSider: typeof import('naive-ui')['NLayoutSider']
-    NMenu: typeof import('naive-ui')['NMenu']
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
-    NSelect: typeof import('naive-ui')['NSelect']
     NTabPane: typeof import('naive-ui')['NTabPane']
     NTabs: typeof import('naive-ui')['NTabs']
     NThemeEditor: typeof import('naive-ui')['NThemeEditor']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SideMenu: typeof import('./src/components/menu/SideMenu.vue')['default']
-    SudeMenu: typeof import('./src/components/menu/SideMenu.vue')['default']
     UserRegistration: typeof import('./src/components/auth/UserRegistration.vue')['default']
   }
 }

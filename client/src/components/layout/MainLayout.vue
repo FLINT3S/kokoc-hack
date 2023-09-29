@@ -1,7 +1,7 @@
 <template>
   <n-layout style="height: 100vh">
     <n-layout-header bordered style="height: 64px; padding: 2px">
-      <section class="container py-2 d-flex justify-content-between align-items-center">
+      <section class="container py-2 px-3 d-flex justify-content-between align-items-center">
         <div class="text-center my-auto lh-1 ms-2" @click="$router.push('/')">
           <h1 class="app-title my-0">
             <CMLogo :icon-width="42" class="top-bar-logo"/>
@@ -23,14 +23,27 @@
         style="top: 64px; bottom: 64px; height: calc(100% - 64px)"
     >
       <n-layout-sider
+          v-model:collapsed="isMenuCollapsed"
+          :collapsed-width="64"
           :native-scrollbar="false"
           bordered
-          show-trigger
-          :collapsed-width="64"
           collapse-mode="width"
-          v-model:collapsed="isMenuCollapsed"
+          content-style="height: 100%; display: flex; flex-direction: column"
+          show-trigger
       >
         <SideMenu :collapsed="isMenuCollapsed"/>
+
+        <div class="mt-auto p-2">
+          <n-collapse-transition :show="!isMenuCollapsed">
+            <n-button block type="error">
+              Выйти
+
+              <template #icon>
+                <n-icon :component="LogOutFilled"/>
+              </template>
+            </n-button>
+          </n-collapse-transition>
+        </div>
       </n-layout-sider>
 
       <n-layout
@@ -61,9 +74,10 @@
 </template>
 
 <script lang="ts" setup>
+import {ref} from 'vue'
 import CMLogo from "@components/CMLogo.vue";
 import SideMenu from "@components/menu/SideMenu.vue";
-import {DarkModeFilled, LightModeFilled} from '@vicons/material'
+import {DarkModeFilled, LightModeFilled, LogOutFilled} from '@vicons/material'
 import {userUserStore} from "@data/store/userStore.ts";
 
 const userStore = userUserStore()
