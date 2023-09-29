@@ -11,6 +11,10 @@ services:
     container_name: server
     image: mindlessdoc/kokoc-hack-server:0.0.2
     restart: always
+    environment:
+      POSTGRES_DB:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
     ports:
       - "5000:5000"
 
