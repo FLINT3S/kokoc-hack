@@ -24,7 +24,7 @@ jobs:
         with:
           context: ./client/
           push: true
-          tags: siailyadev/ooc-hack-client:latest
+          tags: siailyadev/kokoc-hack-client:0.0.1b1
 
       - name: Invoke deployment Portainer hook
         uses: distributhor/workflow-webhook@v2
