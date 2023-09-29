@@ -8,7 +8,9 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     CMLogo: typeof import('./src/components/CMLogo.vue')['default']
+    CompanyRegistration: typeof import('./src/components/auth/CompanyRegistration.vue')['default']
     EmptyLayout: typeof import('./src/components/layout/EmptyLayout.vue')['default']
+    FundRegistration: typeof import('./src/components/auth/FundRegistration.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     MainLayout: typeof import('./src/components/layout/MainLayout.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
@@ -32,6 +34,7 @@ declare module 'vue' {
     NSelect: typeof import('naive-ui')['NSelect']
     NTabPane: typeof import('naive-ui')['NTabPane']
     NTabs: typeof import('naive-ui')['NTabs']
+    NThemeEditor: typeof import('naive-ui')['NThemeEditor']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     UserRegistration: typeof import('./src/components/auth/UserRegistration.vue')['default']

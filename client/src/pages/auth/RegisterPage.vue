@@ -11,17 +11,19 @@
     <n-tab-pane name="oasis" tab="Пользователь">
       <UserRegistration/>
     </n-tab-pane>
-    <n-tab-pane name="the beatles" tab="Администратор">
-      Администратор
+    <n-tab-pane name="the beatles" tab="Компания">
+      <CompanyRegistration/>
     </n-tab-pane>
     <n-tab-pane name="jay chou" tab="Фонд">
-      Фонд
+      <FundRegistration/>
     </n-tab-pane>
   </n-tabs>
 </template>
 
 <script lang="ts" setup>
 import UserRegistration from "@components/auth/UserRegistration.vue";
+import CompanyRegistration from "@components/auth/CompanyRegistration.vue";
+import FundRegistration from "@components/auth/FundRegistration.vue";
 </script>
 
 <style scoped>

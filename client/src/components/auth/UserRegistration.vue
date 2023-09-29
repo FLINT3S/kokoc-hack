@@ -59,7 +59,7 @@ import {axiosInstance} from "@data/api/axiosInstance.ts";
 
 
 const userRegistrationData = reactive({
-  name: '',
+  title: '',
   surname: '',
   login: '',
   password: '',

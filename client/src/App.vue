@@ -1,24 +1,26 @@
 <template>
-  <n-config-provider
-      :date-locale="dateRuRU"
-      :locale="ruRU"
-      :theme="appTheme"
-      :theme-overrides="themeOverrides"
-  >
-    <n-dialog-provider>
-      <n-message-provider>
-        <transition mode="out-in" name="fade">
-          <component :is="layout">
-            <router-view v-slot="{ Component }">
-              <transition :name="transitionName" mode="out-in">
-                <component :is="Component"/>
-              </transition>
-            </router-view>
-          </component>
-        </transition>
-      </n-message-provider>
-    </n-dialog-provider>
-  </n-config-provider>
+  <n-theme-editor>
+    <n-config-provider
+        :date-locale="dateRuRU"
+        :locale="ruRU"
+        :theme="appTheme"
+        :theme-overrides="themeOverrides"
+    >
+      <n-dialog-provider>
+        <n-message-provider>
+          <transition mode="out-in" name="fade">
+            <component :is="layout">
+              <router-view v-slot="{ Component }">
+                <transition :name="transitionName" mode="out-in">
+                  <component :is="Component"/>
+                </transition>
+              </router-view>
+            </component>
+          </transition>
+        </n-message-provider>
+      </n-dialog-provider>
+    </n-config-provider>
+  </n-theme-editor>
 </template>
 
 <script lang="ts" setup>
