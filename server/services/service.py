@@ -2,11 +2,14 @@ from fastapi import FastAPI, APIRouter
 
 from starlette.middleware.cors import CORSMiddleware
 
+from data.databaseservice import DatabaseService
+
 
 class APIService:
-    def __init__(self):
+    def __init__(self, database: DatabaseService):
         self.debug = True
         self.app = FastAPI(title="API")
+        self.database = database
 
         origins = ["*"]
         self.app.add_middleware(
@@ -16,6 +19,7 @@ class APIService:
             allow_methods=[""],
             allow_headers=[""],
         )
+        self.app.state.database = database
 
         self.attach_routes()
 

@@ -1,9 +1,22 @@
+import os
+
 import uvicorn
+from sqlmodel import SQLModel
+
+import data.allmodels
+from data.databaseservice import DatabaseService
 
 from services.service import APIService
 
-api = APIService()
+database_service = DatabaseService(
+    f"postgresql+asyncpg://{os.environ['POSTGRES_USER']}:{os.environ['POSTGRES_PASSWORD']}@81.200.149.171:5432/{os.environ['POSTGRES_DB']}")
+api = APIService(database_service)
 
+
+@api.app.on_event("startup")
+async def init_db():
+    async with database_service.engine.begin() as conn:
+        await conn.run_sync(SQLModel.metadata.create_all)
 
 
 @api.app.get("/api/status")
