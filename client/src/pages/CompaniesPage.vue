@@ -144,13 +144,13 @@ const companiesColumns: DataTableColumn[] = [
   {
     title: 'Число сотрудников',
     key: 'employeesNumber',
-    sorter: (row1: Company, row2: Company) => row1.employeesNumber - row2.employeesNumber
+    sorter: (row1: any, row2: any) => row1.employeesNumber - row2.employeesNumber
   },
   {
     title: 'Заявка подана',
     key: 'requestedAt',
-    sorter: (row1: Company, row2: Company) => row1.requestedAt - row2.requestedAt,
-    render: (row: Company, _) => {
+    sorter: (row1: any, row2: any) => row1.requestedAt - row2.requestedAt,
+    render: (row: any, _) => {
       return new Date(row.requestedAt).toLocaleDateString() + ' в ' + new Date(row.requestedAt).getHours() + ':' + new Date(row.requestedAt).getMinutes()
     }
   },
