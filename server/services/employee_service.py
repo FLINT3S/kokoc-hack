@@ -10,6 +10,8 @@ from services.user_service import UserService
 
 from data.model.user_status import UserStatusEnum
 
+from services.company_service import CompanyService
+
 
 class EmployeeService:
     def __init__(self, database_service: DatabaseService):
@@ -123,3 +125,17 @@ class EmployeeService:
             await session.refresh(employee)
 
             return employee
+
+    async def get_employees_in_company(self, company_id: int):
+        company_service = CompanyService(self.database_service)
+        user_service = UserService(self.database_service)
+
+        company = await company_service.get_company_by_id(company_id)
+        employees = list()
+        for division in company.divisions:
+            for employee in division.employees:
+                user = await user_service.get_user_by_id(employee.user_id)
+                if user.user_status_id == UserStatusEnum.APPROVED.id:
+                    employees.append(employee)
+
+        return employees

@@ -48,3 +48,8 @@ async def moderate(employee_moderate_dto: EmployeeModerateDTO):
 async def moderate(employee_change_division_dto: EmployeeChangeDivisionDTO):
     return await employee_service.change_division(employee_change_division_dto.employee_id,
                                                   employee_change_division_dto.division_id)
+
+@employees_router.get("/get_employees_in_company/{company_id}")
+async def get_employees_in_company(company_id: int):
+    return await employee_service.get_employees_in_company(company_id)
+

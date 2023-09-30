@@ -17,5 +17,5 @@ class Employee(SQLModel, table=True):
         back_populates="employees"
     )
 
-    activities: List["Activity"] = Relationship(back_populates="employee")
-    activities_requests: List["ActivityRequest"] = Relationship(back_populates="employee")
+    activities: List["Activity"] = Relationship(back_populates="employee", sa_relationship_kwargs={'lazy': 'selectin'})
+    activities_requests: List["ActivityRequest"] = Relationship(back_populates="employee", sa_relationship_kwargs={'lazy': 'selectin'})
