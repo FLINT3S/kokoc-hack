@@ -41,6 +41,11 @@ async def login(login_data: LoginDataDTO):
 
 @auth_router.post("/company-registration")
 async def company_registration(company_reg_dto: CompanyRegDTO):
+    user = await user_service.get_user_by_login(company_reg_dto.login)
+
+    if (user):
+        return HTTPException(401, "Пользователь с таким логином уже существует")
+
     user = await user_service.create_user(login=company_reg_dto.login, plain_password=company_reg_dto.password,
                                           role_id=RoleEnum.COMPANYADMIN.id)
     company = await company_service.create_company(user_id=user.id, title=company_reg_dto.title)
