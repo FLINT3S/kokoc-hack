@@ -15,6 +15,7 @@ database_service = DatabaseService(
 api = APIService(database_service)
 
 
+
 @api.app.on_event("startup")
 async def init_db():
     async with database_service.engine.begin() as conn:
