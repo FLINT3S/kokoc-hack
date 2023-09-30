@@ -5,8 +5,8 @@ from starlette.middleware.cors import CORSMiddleware
 from data.database_service import DatabaseService
 
 from controllers.auth_controller import auth_router
-
 from controllers.companies_controller import companies_router
+from controllers.funds_controller import funds_router
 
 
 class APIService:
@@ -32,5 +32,6 @@ class APIService:
         api_router.prefix = "/api"
         self.app.include_router(router=auth_router, prefix="/api/auth")
         self.app.include_router(router=companies_router, prefix="/api/companies")
+        self.app.include_router(router=funds_router, prefix="/api/funds")
 
         self.app.include_router(router=api_router)
