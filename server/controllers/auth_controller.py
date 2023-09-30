@@ -17,12 +17,15 @@ from data.model.role import RoleEnum
 
 from data.model.user_status import UserStatusEnum
 
+from services.fund_service import FundService
+
 auth_router = APIRouter()
 database_service = DatabaseService(
     f"postgresql+asyncpg://{os.environ['POSTGRES_USER']}:{os.environ['POSTGRES_PASSWORD']}@81.200.149.171:5432/{os.environ['POSTGRES_DB']}")
 user_service = UserService(database_service=database_service)
 company_service = CompanyService(database_service)
 employee_service = EmployeeService(database_service)
+fund_service = FundService(database_service)
 
 jwt_service = JWTService()
 
@@ -67,6 +70,18 @@ async def user_registration(employee_reg_dto: EmployeeRegDTO):
         "accessToken": jwt_service.generate_jwt(user.id),
         "user": user,
         "employee": employee
+    }
+
+@auth_router.post("/fund-registration")
+async def fund_registration(fund_reg_dto: FundRegDTO):
+    user = await user_service.create_user(login=fund_reg_dto.login, plain_password=fund_reg_dto.password,
+                                          role_id=RoleEnum.FUNDADMIN.id)
+    fund = await fund_service.create_fund(user_id=user.id, title=fund_reg_dto.title)
+
+    return {
+        "accessToken": jwt_service.generate_jwt(user.id),
+        "user": user,
+        "fundadmin": fund
     }
 
 @auth_router.post("/check")

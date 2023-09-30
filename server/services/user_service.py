@@ -13,6 +13,8 @@ from data.model.employee import Employee
 from data.model.company import Company
 from data.model.fund import Fund
 
+from data.model.user_status import UserStatusEnum
+
 
 class UserService:
     def __init__(self, database_service: DatabaseService):
@@ -21,7 +23,7 @@ class UserService:
     async def create_user(self, login: str, plain_password: str, role_id: int):
         hashed_password = bcrypt.hashpw(str.encode(plain_password), bcrypt.gensalt())
         created_user = User(login=login, password=hashed_password, role_id=role_id,
-                            date=datetime.datetime.now())
+                            date=datetime.datetime.now(), user_status_id=UserStatusEnum.MODERATION.id)
 
         return await self.database_service.save(created_user)
 
