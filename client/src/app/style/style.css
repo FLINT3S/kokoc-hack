@@ -8,6 +8,7 @@
 
 .card-md {
     max-width: 768px;
+    margin: 12px;
 }
 
 @media screen and (min-width: 992px) {
@@ -18,6 +19,11 @@
 
 .content-container {
     max-width: 100%;
+}
+
+.scroll-container {
+    min-width: 576px;
+    overflow: auto;
 }
 
 @media screen and (min-width: 1440px) {

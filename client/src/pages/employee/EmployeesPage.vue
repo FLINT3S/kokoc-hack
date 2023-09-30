@@ -1,88 +1,93 @@
 <template>
   <div class="content-container">
-    <n-tabs v-if="userStore?.currentUser?.role === 'companyadmin'" type="segment">
-      <n-tab-pane name="oasis" tab="Одобренные сотрудники">
-        <n-space vertical>
+    <n-scrollbar x-scrollable>
+      <div class="scroll-container">
+        <n-tabs v-if="userStore?.currentUser?.role === 'companyadmin'" type="segment">
+          <n-tab-pane name="oasis" tab="Одобренные сотрудники">
+            <n-space vertical>
+              <n-input v-model:value="filterQuery" placeholder="Поиск по сотрудникам"/>
+
+              <n-data-table :columns="employeesColumns" :data="filteredEmployees" :loading="employeesStore.loading"
+                            :pagination="{pageSize: 5}"/>
+            </n-space>
+          </n-tab-pane>
+
+          <n-tab-pane name="moderation" tab="На модерации">
+            <n-spin v-if="employeesStore.employeesOnModeration.length && !employeesStore.loadingModeration"
+                    :show="employeesStore.loadingModeration"
+                    class="mt-3">
+              <n-grid :x-gap="10" :y-gap="10" cols="1 400:2 800:3">
+                <n-gi v-for="employee in employeesStore.employeesOnModeration">
+                  <n-card :title="`${employee.name} ${employee.surname}`" size="small">
+                    <p class="m-0">Подразделение: {{ employee.division.title }}</p>
+
+                    <template #header-extra>
+                      {{
+                        new Date(employee.requestedAt).toLocaleDateString() + ' в ' + new Date(employee.requestedAt).getHours() + ':' + new Date(employee.requestedAt).getMinutes()
+                      }}
+                    </template>
+
+                    <template #action>
+                      <n-space>
+                        <n-button secondary type="primary" @click="onClickAcceptEmployee(employee)">
+                          Одобрить
+                        </n-button>
+
+                        <n-button type="error" @click="onClickRejectEmployee(employee)">
+                          Отклонить
+                        </n-button>
+                      </n-space>
+                    </template>
+                  </n-card>
+                </n-gi>
+              </n-grid>
+            </n-spin>
+            <div v-else class="mt-3 text-center">
+              Нет пользователей на модерации
+            </div>
+          </n-tab-pane>
+
+          <n-tab-pane name="rejected" tab="Отклоненные">
+            <n-spin v-if="employeesStore.employeesRejected.length && !employeesStore.loadingRejected"
+                    :show="employeesStore.loadingRejected"
+                    class="mt-3">
+              <n-grid :x-gap="10" :y-gap="10" cols="1 400:2 800:3">
+                <n-gi v-for="employee in employeesStore.employeesRejected">
+                  <n-card :title="`${employee.name} ${employee.surname}`" size="small">
+                    <p class="m-0">Подразделение: {{ employee.division.title }}</p>
+
+                    <template #header-extra>
+                      {{
+                        new Date(employee.requestedAt).toLocaleDateString() + ' в ' + new Date(employee.requestedAt).getHours() + ':' + new Date(employee.requestedAt).getMinutes()
+                      }}
+                    </template>
+
+                    <template #action>
+                      <n-space>
+                        <n-button secondary type="primary" @click="onClickAcceptEmployee(employee)">
+                          Одобрить
+                        </n-button>
+                      </n-space>
+                    </template>
+                  </n-card>
+                </n-gi>
+              </n-grid>
+            </n-spin>
+            <div v-else class="mt-3 text-center">
+              Нет отклоненных пользователей
+            </div>
+          </n-tab-pane>
+        </n-tabs>
+
+
+        <n-space v-else vertical>
           <n-input v-model:value="filterQuery" placeholder="Поиск по сотрудникам"/>
 
           <n-data-table :columns="employeesColumns" :data="filteredEmployees" :loading="employeesStore.loading"
                         :pagination="{pageSize: 5}"/>
         </n-space>
-      </n-tab-pane>
-
-      <n-tab-pane name="moderation" tab="На модерации">
-        <n-spin v-if="employeesStore.employeesOnModeration.length && !employeesStore.loadingModeration"
-                :show="employeesStore.loadingModeration"
-                class="mt-3">
-          <n-grid :x-gap="10" :y-gap="10" cols="1 400:2 800:3">
-            <n-gi v-for="employee in employeesStore.employeesOnModeration">
-              <n-card :title="`${employee.name} ${employee.surname}`" size="small">
-                <p class="m-0">Подразделение: {{employee.division.title}}</p>
-
-                <template #header-extra>
-                  {{
-                    new Date(employee.requestedAt).toLocaleDateString() + ' в ' + new Date(employee.requestedAt).getHours() + ':' + new Date(employee.requestedAt).getMinutes()
-                  }}
-                </template>
-
-                <template #action>
-                  <n-space>
-                    <n-button secondary type="primary" @click="onClickAcceptEmployee(employee)">
-                      Одобрить
-                    </n-button>
-
-                    <n-button type="error" @click="onClickRejectEmployee(employee)">
-                      Отклонить
-                    </n-button>
-                  </n-space>
-                </template>
-              </n-card>
-            </n-gi>
-          </n-grid>
-        </n-spin>
-        <div v-else class="mt-3 text-center">
-          Нет пользователей на модерации
-        </div>
-      </n-tab-pane>
-
-      <n-tab-pane name="rejected" tab="Отклоненные">
-        <n-spin v-if="employeesStore.employeesRejected.length && !employeesStore.loadingRejected"
-                :show="employeesStore.loadingRejected"
-                class="mt-3">
-          <n-grid :x-gap="10" :y-gap="10" cols="1 400:2 800:3">
-            <n-gi v-for="employee in employeesStore.employeesRejected">
-              <n-card :title="`${employee.name} ${employee.surname}`" size="small">
-                <p class="m-0">Подразделение: {{employee.division.title}}</p>
-
-                <template #header-extra>
-                  {{
-                    new Date(employee.requestedAt).toLocaleDateString() + ' в ' + new Date(employee.requestedAt).getHours() + ':' + new Date(employee.requestedAt).getMinutes()
-                  }}
-                </template>
-
-                <template #action>
-                  <n-space>
-                    <n-button secondary type="primary" @click="onClickAcceptEmployee(employee)">
-                      Одобрить
-                    </n-button>
-                  </n-space>
-                </template>
-              </n-card>
-            </n-gi>
-          </n-grid>
-        </n-spin>
-        <div v-else class="mt-3 text-center">
-          Нет отклоненных пользователей
-        </div>
-      </n-tab-pane>
-    </n-tabs>
-
-    <n-space v-else vertical>
-      <n-input v-model:value="filterQuery" placeholder="Поиск по сотрудникам"/>
-
-      <n-data-table :columns="employeesColumns" :data="filteredEmployees" :loading="employeesStore.loading"
-                    :pagination="{pageSize: 5}"/>
-    </n-space>
+      </div>
+    </n-scrollbar>
   </div>
 </template>
 

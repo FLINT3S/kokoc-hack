@@ -5,12 +5,16 @@
       <n-skeleton v-else text width="100%"/>
     </div>
 
-    <n-data-table
-        :columns="employeeColumns"
-        :data="divisionItem?.employees"
-        :loading="isLoading"
-        :pagination="{pageSize: 10}"
-    />
+    <n-scrollbar x-scrollable>
+      <div class="scroll-container">
+        <n-data-table
+            :columns="employeeColumns"
+            :data="divisionItem?.employees"
+            :loading="isLoading"
+            :pagination="{pageSize: 10}"
+        />
+      </div>
+    </n-scrollbar>
 
     <n-modal :show="isEmployeeManageModalShown" closable>
       <n-card :title="'Управление пользователем ' + selectedEmployee?.name + ' ' + selectedEmployee?.surname"

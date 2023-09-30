@@ -1,77 +1,81 @@
 <template>
   <div class="content-container">
-    <n-tabs type="segment">
-      <n-tab-pane name="oasis" tab="Одобренные компании">
-        <n-space vertical>
-          <n-input v-model:value="filterQuery" placeholder="Поиск по компаниям"/>
+    <n-scrollbar x-scrollable>
+      <div class="scroll-container">
+        <n-tabs type="segment">
+          <n-tab-pane name="oasis" tab="Одобренные компании">
+            <n-space vertical>
+              <n-input v-model:value="filterQuery" placeholder="Поиск по компаниям"/>
 
-          <n-data-table :columns="companiesColumns" :data="filteredCompanies" :loading="companiesStore.loading"
-                        :pagination="{pageSize: 5}"/>
-        </n-space>
-      </n-tab-pane>
+              <n-data-table :columns="companiesColumns" :data="filteredCompanies" :loading="companiesStore.loading"
+                            :pagination="{pageSize: 5}"/>
+            </n-space>
+          </n-tab-pane>
 
-      <n-tab-pane name="moderation" tab="На модерации">
-        <n-spin v-if="companiesStore.companiesOnModeration.length && !companiesStore.loadingModeration"
-                :show="companiesStore.loadingModeration"
-                class="mt-3">
-          <n-grid :x-gap="10" :y-gap="10" cols="1 400:2 800:3">
-            <n-gi v-for="company in companiesStore.companiesOnModeration">
-              <n-card :title="company.title" size="small">
-                <template #header-extra>
-                  {{
-                    new Date(company.requestedAt).toLocaleDateString() + ' в ' + new Date(company.requestedAt).getHours() + ':' + new Date(company.requestedAt).getMinutes()
-                  }}
-                </template>
+          <n-tab-pane name="moderation" tab="На модерации">
+            <n-spin v-if="companiesStore.companiesOnModeration.length && !companiesStore.loadingModeration"
+                    :show="companiesStore.loadingModeration"
+                    class="mt-3">
+              <n-grid :x-gap="10" :y-gap="10" cols="1 400:2 800:3">
+                <n-gi v-for="company in companiesStore.companiesOnModeration">
+                  <n-card :title="company.title" size="small">
+                    <template #header-extra>
+                      {{
+                        new Date(company.requestedAt).toLocaleDateString() + ' в ' + new Date(company.requestedAt).getHours() + ':' + new Date(company.requestedAt).getMinutes()
+                      }}
+                    </template>
 
-                <template #action>
-                  <n-space>
-                    <n-button secondary type="primary" @click="onClickAcceptCompany(company)">
-                      Одобрить
-                    </n-button>
+                    <template #action>
+                      <n-space>
+                        <n-button secondary type="primary" @click="onClickAcceptCompany(company)">
+                          Одобрить
+                        </n-button>
 
-                    <n-button type="error" @click="onClickRejectCompany(company)">
-                      Отклонить
-                    </n-button>
-                  </n-space>
-                </template>
-              </n-card>
-            </n-gi>
-          </n-grid>
-        </n-spin>
-        <div v-else class="mt-3 text-center">
-          Нет компаний на модерации
-        </div>
-      </n-tab-pane>
+                        <n-button type="error" @click="onClickRejectCompany(company)">
+                          Отклонить
+                        </n-button>
+                      </n-space>
+                    </template>
+                  </n-card>
+                </n-gi>
+              </n-grid>
+            </n-spin>
+            <div v-else class="mt-3 text-center">
+              Нет компаний на модерации
+            </div>
+          </n-tab-pane>
 
-      <n-tab-pane name="rejected" tab="Отклоненные">
-        <n-spin v-if="companiesStore.companiesRejected.length && !companiesStore.loadingRejected"
-                :show="companiesStore.loadingRejected"
-                class="mt-3">
-          <n-grid :x-gap="10" :y-gap="10" cols="1 400:2 800:3">
-            <n-gi v-for="company in companiesStore.companiesRejected">
-              <n-card :title="company.title" size="small">
-                <template #header-extra>
-                  {{
-                    new Date(company.requestedAt).toLocaleDateString() + ' в ' + new Date(company.requestedAt).getHours() + ':' + new Date(company.requestedAt).getMinutes()
-                  }}
-                </template>
+          <n-tab-pane name="rejected" tab="Отклоненные">
+            <n-spin v-if="companiesStore.companiesRejected.length && !companiesStore.loadingRejected"
+                    :show="companiesStore.loadingRejected"
+                    class="mt-3">
+              <n-grid :x-gap="10" :y-gap="10" cols="1 400:2 800:3">
+                <n-gi v-for="company in companiesStore.companiesRejected">
+                  <n-card :title="company.title" size="small">
+                    <template #header-extra>
+                      {{
+                        new Date(company.requestedAt).toLocaleDateString() + ' в ' + new Date(company.requestedAt).getHours() + ':' + new Date(company.requestedAt).getMinutes()
+                      }}
+                    </template>
 
-                <template #action>
-                  <n-space>
-                    <n-button secondary type="primary" @click="onClickAcceptCompany(company)">
-                      Одобрить
-                    </n-button>
-                  </n-space>
-                </template>
-              </n-card>
-            </n-gi>
-          </n-grid>
-        </n-spin>
-        <div v-else class="mt-3 text-center">
-          Нет отклоненных компаний
-        </div>
-      </n-tab-pane>
-    </n-tabs>
+                    <template #action>
+                      <n-space>
+                        <n-button secondary type="primary" @click="onClickAcceptCompany(company)">
+                          Одобрить
+                        </n-button>
+                      </n-space>
+                    </template>
+                  </n-card>
+                </n-gi>
+              </n-grid>
+            </n-spin>
+            <div v-else class="mt-3 text-center">
+              Нет отклоненных компаний
+            </div>
+          </n-tab-pane>
+        </n-tabs>
+      </div>
+    </n-scrollbar>
   </div>
 </template>
 

@@ -8,8 +8,12 @@
       </n-button>
     </div>
 
-    <n-data-table :columns="divisionsColumns" :data="divisions" :loading="isDivisionLoading"
-                  :pagination="{pageSize: 10}"/>
+    <n-scrollbar x-scrollable>
+      <div class="scroll-container">
+        <n-data-table :columns="divisionsColumns" :data="divisions" :loading="isDivisionLoading"
+                      :pagination="{pageSize: 10}"/>
+      </div>
+    </n-scrollbar>
 
     <n-modal v-model:show="isAddDivisionModalShown" :loading="isDivisionLoading" closable>
       <n-card class="card-md" closable title="Добавить подразделение" @close="isAddDivisionModalShown = false">
