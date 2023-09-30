@@ -1,5 +1,5 @@
 <template>
-  personal
+  employee
 </template>
 
 <script lang="ts" setup>
