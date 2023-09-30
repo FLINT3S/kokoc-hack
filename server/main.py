@@ -19,7 +19,6 @@ api = APIService(database_service)
 async def init_db():
     async with database_service.engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
-        # TODO убрать на проде
         role_service = RoleService(database_service)
         await role_service.drop_and_init_default_data()
 
