@@ -9,7 +9,7 @@ services:
 
   server:
     container_name: server
-    image: mindlessdoc/kokoc-hack-server:0.0.2
+    image: mindlessdoc/kokoc-hack-server:0.0.4
     restart: always
     environment:
       POSTGRES_DB:

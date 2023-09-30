@@ -2,7 +2,9 @@ from fastapi import FastAPI, APIRouter
 
 from starlette.middleware.cors import CORSMiddleware
 
-from data.databaseservice import DatabaseService
+from data.database_service import DatabaseService
+
+from controllers.auth_controller import auth_router
 
 
 class APIService:
@@ -26,5 +28,6 @@ class APIService:
     def attach_routes(self):
         api_router = APIRouter()
         api_router.prefix = "/api"
+        self.app.include_router(router=auth_router, prefix="/api/auth")
 
         self.app.include_router(router=api_router)
