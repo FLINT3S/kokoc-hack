@@ -3,9 +3,9 @@ import os
 import uvicorn
 from sqlmodel import SQLModel
 
-import data.allmodels
-from data.databaseservice import DatabaseService
-from services.roleservice import RoleService
+import data.all_models
+from data.database_service import DatabaseService
+from services.role_service import RoleService
 
 from services.service import APIService
 

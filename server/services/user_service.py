@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from data.databaseservice import DatabaseService
+from data.database_service import DatabaseService
 from data.model.user import User
 
 

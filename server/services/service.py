@@ -2,7 +2,7 @@ from fastapi import FastAPI, APIRouter
 
 from starlette.middleware.cors import CORSMiddleware
 
-from data.databaseservice import DatabaseService
+from data.database_service import DatabaseService
 
 
 class APIService:
