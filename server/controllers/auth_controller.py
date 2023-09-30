@@ -15,6 +15,7 @@ from services.employee_service import EmployeeService
 
 from data.model.role import RoleEnum
 
+from data.model.user_status import UserStatusEnum
 
 auth_router = APIRouter()
 database_service = DatabaseService(
@@ -71,6 +72,10 @@ async def check(token_data: CheckTokenDTO):
         raise HTTPException(403, "Ошибка проверки токена")
 
     user = await user_service.get_user_by_id(int(decoded.get("user_id")))
+
+    if (user.user_status_id == UserStatusEnum.MODERATION.id):
+        return HTTPException(401, "Пользователь на модерации")
+
     entity = await user_service.get_user_entity(int(decoded.get("user_id")))
 
     if user and entity:
