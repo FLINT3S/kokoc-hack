@@ -6,7 +6,7 @@ import {
   GroupsFilled,
   HomeFilled,
   RedeemFilled
-} from "@vicons/material";
+} from "@components/icons";
 import {RouterLink} from "vue-router";
 
 

@@ -77,7 +77,7 @@
 import {ref} from 'vue'
 import CMLogo from "@components/CMLogo.vue";
 import SideMenu from "@components/menu/SideMenu.vue";
-import {DarkModeFilled, LightModeFilled, LogOutFilled} from '@vicons/material'
+import {DarkModeFilled, LightModeFilled, LogOutFilled} from "@components/icons"
 import {useUserStore} from "@data/store/userStore.ts";
 
 const userStore = useUserStore()

@@ -44,7 +44,7 @@
 <script lang="ts" setup>
 import {computed, reactive, ref} from 'vue'
 import {FormRules} from "naive-ui";
-import {VisibilityFilled, VisibilityOffFilled} from "@vicons/material"
+import {VisibilityFilled, VisibilityOffFilled} from "@components/icons"
 import {axiosInstance} from "@data/api/axiosInstance.ts";
 import {CurrentUser} from "@data/models/CurrentUser.ts";
 import {useRouter} from "vue-router";
