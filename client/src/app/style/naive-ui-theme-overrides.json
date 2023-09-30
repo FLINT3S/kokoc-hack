@@ -1,2 +1,41 @@
 {
+  "Menu": {
+    "itemColorActive": "rgba(246, 102, 75, 0.1)",
+    "itemTextColorActive": "#F6664BFF",
+    "itemTextColorChildActive": "#A04818FF",
+    "borderRadius": "99px",
+    "itemIconColorActive": "#F6664BFF",
+    "itemIconColorActiveHover": "#FF4E2DFF",
+    "itemTextColorActiveHover": "#FF4E2DFF",
+    "itemColorActiveHover": "rgba(246, 102, 75, 0.2)"
+  },
+  "Button": {
+    "heightMedium": "42px",
+    "borderRadiusMedium": "99px",
+    "textColorPressed": "#F6664BFF",
+    "textColorHover": "#FF4E2DFF",
+    "colorHoverPrimary": "#FF4E2DFF",
+    "textColorTextHover": "#FF4E2DFF",
+    "textColorGhostHover": "#FF4E2DFF",
+    "borderHover": "1px solid #FF4E2DFF",
+    "borderPressed": "1px solid #F6664BFF",
+    "textColorFocus": "#F6664BFF",
+    "borderFocus": "1px solid #F6664BFF"
+  },
+  "Card": {
+    "borderColor": "rgba(239, 239, 245, 0)"
+  },
+  "Input": {
+    "caretColor": "#F6664BFF",
+    "loadingColor": "#F6664BFF",
+    "heightMedium": "42px",
+    "borderFocus": "1px solid #F6664B",
+    "boxShadowFocus": "0 0 0 2px rgba(246, 102, 75, 0.2)",
+    "borderHover": "1px solid #F6664B"
+  },
+  "common": {
+    "primaryColor": "#F6664BFF",
+    "primaryColorHover": "#FF8E78FF",
+    "primaryColorPressed": "#FF4E2DFF"
+  }
 }
