@@ -7,6 +7,8 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from services.user_service import UserService
 
+from data.model.user import User
+
 
 class CompanyService:
     def __init__(self, database_service: DatabaseService):
@@ -82,3 +84,36 @@ class CompanyService:
                         "employeesNumber": employeesCount
                     })
             return listResult
+
+    async def moderate(self, company_id: int, status: bool):
+        async with AsyncSession(self.database_service.engine) as session:
+            st = select(Company) \
+                .where(Company.id == company_id) \
+                .limit(1)
+
+            company = (await session.execute(st)).first()[0]
+
+            user_service = UserService(database_service=self.database_service)
+            user = await user_service.get_user_by_id(company.user_id)
+
+            if status:
+                user.user_status_id = UserStatusEnum.APPROVED.id
+            else:
+                user.user_status_id = UserStatusEnum.CANCELED.id
+
+            session.add(user)
+            await session.commit()
+            await session.refresh(user)
+
+            return user
+
+
+    async def get_company_by_id(self, company_id: int):
+        async with AsyncSession(self.database_service.engine) as session:
+            st = select(Company) \
+                .where(Company.id == company_id) \
+                .limit(1)
+            result = (await session.execute(st)).first()
+
+            if result:
+                return result[0]
