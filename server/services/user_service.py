@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 import bcrypt
 from fastapi import HTTPException
