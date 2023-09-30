@@ -28,7 +28,8 @@
         <span class="text-danger">{{ loginError }}</span>
       </n-collapse-transition>
 
-      <n-button :disabled="!(loginData.login && loginData.password)" :loading="isLoading" block size="large" type="primary"
+      <n-button :disabled="!(loginData.login && loginData.password)" :loading="isLoading" block size="large"
+                type="primary"
                 @click="submitLogin">
         Войти
       </n-button>
@@ -43,7 +44,6 @@ import {VisibilityFilled, VisibilityOffFilled} from "@vicons/material"
 import {axiosInstance} from "@data/api/axiosInstance.ts";
 import {useRouter} from "vue-router";
 import {userUserStore} from "@data/store/userStore.ts";
-import {CurrentUser} from "@data/models/CurrentUser.ts";
 
 const loginData = reactive({
   login: "",
