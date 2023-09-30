@@ -15,6 +15,9 @@ services:
       POSTGRES_DB:
       POSTGRES_USER:
       POSTGRES_PASSWORD:
+    volumes:
+      - repository:/code/public
+
     ports:
       - "5000:5000"
 
@@ -38,4 +41,6 @@ services:
 
 volumes:
   bd-database:
+    external: true
+  repository:
     external: true

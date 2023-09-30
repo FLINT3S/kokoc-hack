@@ -11,6 +11,8 @@ from controllers.divisions_controller import division_router
 
 from controllers.employees_controller import employees_router
 
+from controllers.activities_controller import activities_route
+
 
 class APIService:
     def __init__(self, database: DatabaseService):
@@ -38,5 +40,6 @@ class APIService:
         self.app.include_router(router=funds_router, prefix="/api/funds")
         self.app.include_router(router=division_router, prefix="/api/divisions")
         self.app.include_router(router=employees_router, prefix="/api/employees")
+        self.app.include_router(router=activities_route, prefix="/api/activities")
 
         self.app.include_router(router=api_router)

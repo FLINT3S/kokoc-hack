@@ -1,8 +1,9 @@
-from typing import Optional
+from typing import Optional, List
 
 from sqlmodel import SQLModel, Field, Relationship
 
 from data.model.division import Division
+from data.model.activity import Activity
 
 class Employee(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -13,3 +14,5 @@ class Employee(SQLModel, table=True):
     division: Optional["Division"] = Relationship(
         back_populates="employees"
     )
+
+    activities: List["Activity"] = Relationship(back_populates="employee")
