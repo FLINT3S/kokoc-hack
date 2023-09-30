@@ -80,6 +80,7 @@ const fetchAll = async () => {
 }
 
 const onClickSaveEmployee = async () => {
+  await axiosInstance.post('/employees/change-division', {employee_id: selectedEmployee.value?.id, division_id: selectedEmployee.value?.division_id})
   await fetchAll()
   isEmployeeManageModalShown.value = false
 }
