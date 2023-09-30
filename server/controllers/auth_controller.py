@@ -19,6 +19,8 @@ from data.model.user_status import UserStatusEnum
 
 from services.fund_service import FundService
 
+from controllers.dto.fund_reg_dto import FundRegDTO
+
 auth_router = APIRouter()
 database_service = DatabaseService(
     f"postgresql+asyncpg://{os.environ['POSTGRES_USER']}:{os.environ['POSTGRES_PASSWORD']}@81.200.149.171:5432/{os.environ['POSTGRES_DB']}")
@@ -61,6 +63,11 @@ async def company_registration(company_reg_dto: CompanyRegDTO):
 
 @auth_router.post("/user-registration")
 async def user_registration(employee_reg_dto: EmployeeRegDTO):
+    user = await user_service.get_user_by_login(employee_reg_dto.login)
+
+    if (user):
+        return HTTPException(401, "Пользователь с таким логином уже существует")
+
     user = await user_service.create_user(login=employee_reg_dto.login, plain_password=employee_reg_dto.password,
                                           role_id=RoleEnum.USER.id)
     employee = await employee_service.create_employee(user_id=user.id, name=employee_reg_dto.name, surname=employee_reg_dto.surname,
@@ -74,6 +81,11 @@ async def user_registration(employee_reg_dto: EmployeeRegDTO):
 
 @auth_router.post("/fund-registration")
 async def fund_registration(fund_reg_dto: FundRegDTO):
+    user = await user_service.get_user_by_login(fund_reg_dto.login)
+
+    if (user):
+        return HTTPException(401, "Пользователь с таким логином уже существует")
+
     user = await user_service.create_user(login=fund_reg_dto.login, plain_password=fund_reg_dto.password,
                                           role_id=RoleEnum.FUNDADMIN.id)
     fund = await fund_service.create_fund(user_id=user.id, title=fund_reg_dto.title)
