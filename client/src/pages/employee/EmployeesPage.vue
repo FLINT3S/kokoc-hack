@@ -101,8 +101,6 @@ const userStore = useUserStore()
 const dialog = useDialog()
 const message = useMessage()
 
-const mode = ref<any | null>(userStore.currentUser!.role)
-
 const onClickAcceptEmployee = (employee: Employee) => {
   dialog.create({
     title: `Принять ${employee.name} ${employee.surname}?`,
@@ -160,7 +158,7 @@ const employeesColumns: DataTableColumn[] = [
   {
     title: 'Заявка подана',
     key: 'requestedAt',
-    sorter: (row1: any, row2: any) => row1.requestedAt - row2.requestedAt,
+    sorter: (row1: any, row2: any) => new Date(row1.requestedAt).getTime() - new Date(row2.requestedAt).getTime(),
     render: (row: any, _) => {
       return new Date(row.requestedAt).toLocaleDateString() + ' в ' + new Date(row.requestedAt).getHours() + ':' + new Date(row.requestedAt).getMinutes()
     }
