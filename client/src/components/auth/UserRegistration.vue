@@ -35,13 +35,13 @@
     </n-form-item>
 
     <n-form-item label="Компания" path="companyId">
-      <n-select v-model:value="userRegistrationData.companyId" :options="companies" label-field="title"
+      <n-select filterable v-model:value="userRegistrationData.companyId" :options="companies" label-field="title"
                 value-field="id">
       </n-select>
     </n-form-item>
 
     <n-form-item label="Подразделение" path="divisionId">
-      <n-select v-model:value="userRegistrationData.divisionId" :disabled="userRegistrationData.companyId === null"
+      <n-select filterable v-model:value="userRegistrationData.divisionId" :disabled="userRegistrationData.companyId === null"
                 :options="divisions" label-field="title" value-field="id">
       </n-select>
     </n-form-item>
@@ -63,7 +63,7 @@ import {VisibilityFilled, VisibilityOffFilled} from "@vicons/material"
 import {axiosInstance} from "@data/api/axiosInstance.ts";
 import {CurrentUser} from "@data/models/CurrentUser.ts";
 import {useRouter} from "vue-router";
-import {userUserStore} from "@data/store/userStore.ts";
+import {useUserStore} from "@data/store/userStore.ts";
 
 
 const userRegistrationData = reactive({
@@ -112,31 +112,25 @@ const companies = ref([] as any[])
 const divisions = ref([] as any[])
 
 
-const loadCompanies = () => {
-  companies.value = [{
-    title: 'kokoc',
-    id: 1
-  }]
+const loadCompanies = async () => {
+  companies.value = (await axiosInstance.get('/companies/get-all-approved')).data
 }
 
-const loadDivisions = () => {
-  divisions.value = [{
-    title: 'IT-департамент',
-    id: 1
-  }]
+const loadDivisions = async () => {
+  divisions.value = (await axiosInstance.get('/divisions/get-all/' + userRegistrationData.companyId)).data
 }
 
 watch(() => userRegistrationData.companyId, loadDivisions);
 
-onMounted(() => {
-  loadCompanies()
+onMounted(async () => {
+  await loadCompanies()
 })
 
 const router = useRouter();
 const regError = ref('');
 const isLoading = ref(false);
 
-const userStore = userUserStore();
+const userStore = useUserStore();
 
 const onClickSubmitUserRegistration = () => {
   axiosInstance.post('/auth/user-registration', userRegistrationData)

@@ -47,7 +47,7 @@ import {VisibilityFilled, VisibilityOffFilled} from "@vicons/material"
 import {axiosInstance} from "@data/api/axiosInstance.ts";
 import {CurrentUser} from "@data/models/CurrentUser.ts";
 import {useRouter} from "vue-router";
-import {userUserStore} from "@data/store/userStore.ts";
+import {useUserStore} from "@data/store/userStore.ts";
 
 
 const fundRegistrationData = reactive({
@@ -90,7 +90,7 @@ const router = useRouter();
 const regError = ref('');
 const isLoading = ref(false);
 
-const userStore = userUserStore();
+const userStore = useUserStore();
 
 
 const onClickSubmitCompanyRegistration = () => {

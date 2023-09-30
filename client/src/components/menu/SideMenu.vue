@@ -23,11 +23,11 @@
 <script lang="ts" setup>
 import {menuOptions} from "@data/menuData.ts";
 import {computed} from "vue";
-import {userUserStore} from "@data/store/userStore.ts";
+import {useUserStore} from "@data/store/userStore.ts";
 
 defineProps<{collapsed: boolean}>()
 
-const userStore = userUserStore();
+const userStore = useUserStore();
 
 const menuOptionsFiltered = computed(() => {
   return menuOptions.filter((m) => m.roles.includes(userStore.currentUser?.role || ''))

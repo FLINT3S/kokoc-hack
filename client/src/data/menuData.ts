@@ -39,7 +39,7 @@ export const menuOptions: (MenuOption & { roles: string [] })[] = [
             path: '/mycompany',
           }
         },
-        {default: () => 'Моя компания'}
+        {default: () => 'Подразделения'}
       ),
     key: 'mycompany',
     icon: renderIcon(CorporateFareOutlined),

@@ -6,12 +6,13 @@ import RegisterPage from "@/pages/auth/RegisterPage.vue";
 import LoginPage from "@/pages/auth/LoginPage.vue";
 import ModerationPage from "@/pages/auth/ModeartionPage.vue";
 import MyCompanyPage from "@/pages/SingleCompanyPage.vue";
+import SingleCompanyPage from "@/pages/SingleCompanyPage.vue";
 import PersonalPage from "@/pages/PersonalPage.vue";
 import LeaderBoardPage from "@/pages/LeaderBoardPage.vue";
 import CompaniesPage from "@/pages/CompaniesPage.vue";
 import FundsPage from "@/pages/FundsPage.vue";
 import SingleFundPage from "@/pages/SingleFundPage.vue";
-import SingleCompanyPage from "@/pages/SingleCompanyPage.vue";
+import SingleDivisionPage from "@/pages/SingleDivisionPage.vue";
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -42,10 +43,19 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/mycompany',
-    component: MyCompanyPage,
     meta: {
       layout: MainLayout
-    }
+    },
+    children: [
+      {
+        path: '',
+        component: MyCompanyPage
+      },
+      {
+        path: ':companyId/:divisionId',
+        component: SingleDivisionPage
+      }
+    ]
   },
   {
     path: '/personal',
@@ -63,27 +73,37 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/companies',
-    component: CompaniesPage,
     meta: {
       layout: MainLayout
     },
     children: [
       {
+        path: '',
+        component: CompaniesPage,
+      },
+      {
         path: ':id',
-        component: SingleCompanyPage
+        component: SingleCompanyPage,
+      },
+      {
+        path: ':companyId/:divisionId',
+        component: SingleDivisionPage
       }
     ]
   },
   {
     path: '/funds',
-    component: FundsPage,
     meta: {
       layout: MainLayout
     },
     children: [
       {
+        path: '',
+        component: FundsPage,
+      },
+      {
         path: ':id',
-        component: SingleCompanyPage
+        component: SingleFundPage
       }
     ]
   },

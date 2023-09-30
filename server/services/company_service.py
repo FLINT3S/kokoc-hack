@@ -1,5 +1,6 @@
 from data.database_service import DatabaseService
 from data.model.company import Company
+from data.model.division import Division
 from data.model.user_status import UserStatusEnum
 
 from sqlmodel import select
@@ -16,8 +17,12 @@ class CompanyService:
 
     async def create_company(self, user_id: int, title: str):
         created_company = Company(user_id=user_id, title=title)
-
+        await self.database_service.save(created_company)
+        division = Division(title='Общее', company_id=created_company.id)
+        created_company.divisions.append(division)
         return await self.database_service.save(created_company)
+
+
 
     async def get_all_moderating_companies(self):
         async with AsyncSession(self.database_service.engine) as session:

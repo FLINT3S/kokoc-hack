@@ -78,9 +78,9 @@ import {ref} from 'vue'
 import CMLogo from "@components/CMLogo.vue";
 import SideMenu from "@components/menu/SideMenu.vue";
 import {DarkModeFilled, LightModeFilled, LogOutFilled} from '@vicons/material'
-import {userUserStore} from "@data/store/userStore.ts";
+import {useUserStore} from "@data/store/userStore.ts";
 
-const userStore = userUserStore()
+const userStore = useUserStore()
 
 const isMenuCollapsed = ref(false);
 

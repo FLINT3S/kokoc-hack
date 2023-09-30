@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import {userUserStore} from "@data/store/userStore.ts";
+import {useUserStore} from "@data/store/userStore.ts";
 
 withDefaults(defineProps<{
   iconWidth?: number
@@ -16,7 +16,7 @@ withDefaults(defineProps<{
   iconWidth: 56
 })
 
-const userStore = userUserStore()
+const userStore = useUserStore()
 </script>
 
 <style>
