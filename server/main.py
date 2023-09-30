@@ -10,8 +10,9 @@ from services.service import APIService
 
 database_service = DatabaseService(
     f"postgresql+asyncpg://{os.environ['POSTGRES_USER']}:{os.environ['POSTGRES_PASSWORD']}@81.200.149.171:5432/{os.environ['POSTGRES_DB']}")
+# TODO убрать на проде
+database_service.reset()
 api = APIService(database_service)
-
 
 
 @api.app.on_event("startup")

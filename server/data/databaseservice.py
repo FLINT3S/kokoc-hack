@@ -5,6 +5,8 @@ from sqlalchemy.orm import sessionmaker
 
 from sqlmodel import SQLModel
 
+from services.roleservice import RoleService
+
 
 class DatabaseService:
     def __init__(self, dsn: str):
@@ -42,3 +44,9 @@ class DatabaseService:
 
     async def init_meta_data(self):
         SQLModel.metadata.create_all(self.engine)
+
+    async def reset(self):
+        await SQLModel.metadata.clear()
+        await self.init_meta_data()
+        role_service = RoleService(self)
+        role_service.drop_and_init_default_data()
