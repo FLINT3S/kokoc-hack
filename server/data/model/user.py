@@ -1,10 +1,11 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 from sqlmodel import SQLModel, Field, Relationship
 
 from data.model.role import Role
 from data.model.user_status import UserStatus
+from data.model.activity import Activity
 
 class User(SQLModel, table=True):
     __tablename__ = "user"
@@ -24,3 +25,5 @@ class User(SQLModel, table=True):
     )
 
     date: datetime = Field(default=None, nullable=False)
+
+    activities: List["Activity"] = Relationship(back_populates="user")
