@@ -4,7 +4,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from data.model.role import Role
 from data.model.role import RoleEnum
 
-from data.databaseservice import DatabaseService
+from data.database_service import DatabaseService
 
 
 class RoleService:
