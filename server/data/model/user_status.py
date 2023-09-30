@@ -1,22 +1,22 @@
+from datetime import datetime
 from enum import Enum
 from typing import Optional, List
 
 from sqlmodel import SQLModel, Field, Relationship
 
 
-class Role(SQLModel, table=True):
-    __tablename__ = "role"
+class UserStatus(SQLModel, table=True):
+    __tablename__ = "user_status"
 
     id: Optional[int] = Field(default=None, primary_key=True)
-    name: str = Field(default=None, nullable=False)
-    users: List["User"] = Relationship(back_populates="role")
+    name: str
+    users: List["User"] = Relationship(back_populates="user_status")
 
+class UserStatusEnum(Enum):
+    MODERATION = "На модерации", 1,
+    APPROVED = "Принято", 2,
+    CANCELED = "Отклонено", 3,
 
-class RoleEnum(Enum):
-    SUPERADMIN = "superadmin", 1,
-    USER = "employee", 2,
-    COMPANYADMIN = "companyadmin", 3,
-    FUNDADMIN = "fundadmin", 4,
     def __new__(cls, *args, **kwds):
         obj = object.__new__(cls)
         obj._value_ = args[0]

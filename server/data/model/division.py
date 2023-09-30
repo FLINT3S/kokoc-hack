@@ -11,4 +11,4 @@ class Division(SQLModel, table=True):
     company: Optional["Company"] = Relationship(
         back_populates="divisions"
     )
-    employees: List["Employee"] = Relationship(back_populates="division")
+    employees: List["Employee"] = Relationship(back_populates="division", sa_relationship_kwargs={'lazy': 'selectin'})

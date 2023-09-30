@@ -6,6 +6,8 @@ from data.database_service import DatabaseService
 
 from controllers.auth_controller import auth_router
 
+from controllers.companies_controller import companies_router
+
 
 class APIService:
     def __init__(self, database: DatabaseService):
@@ -29,5 +31,6 @@ class APIService:
         api_router = APIRouter()
         api_router.prefix = "/api"
         self.app.include_router(router=auth_router, prefix="/api/auth")
+        self.app.include_router(router=companies_router, prefix="/api/companies")
 
         self.app.include_router(router=api_router)
