@@ -8,6 +8,10 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from data.database_service import DatabaseService
 from data.model.user import User
+from data.model.superadmin import SuperAdmin
+from data.model.employee import Employee
+from data.model.company import Company
+from data.model.fund import Fund
 
 
 class UserService:
@@ -40,6 +44,38 @@ class UserService:
 
             if result:
                 return result[0]
+
+    async def get_user_entity(self, user_id: int):
+        """Возвращает сущность, привязанную к пользователю"""
+
+        async with AsyncSession(self.database_service.engine) as session:
+            st = select(User) \
+                .where(User.id == user_id) \
+                .limit(1)
+            result = (await session.execute(st)).first()[0]
+
+            if result:
+                if result.role_id == 1:
+                    st = select(SuperAdmin) \
+                        .where(SuperAdmin.user_id == user_id)
+                    return (await session.execute(st)).first()[0]
+
+                elif result.role_id == 2:
+                    st = select(Employee) \
+                        .where(Employee.user_id == user_id)
+                    return (await session.execute(st)).first()[0]
+
+                elif result.role_id == 3:
+                    st = select(Company) \
+                        .where(Company.user_id == user_id)
+                    return (await session.execute(st)).first()[0]
+
+                elif result.role_id == 4:
+                    st = select(Fund) \
+                        .where(Fund.user_id == user_id)
+                    return (await session.execute(st)).first()[0]
+
+            return None
 
     async def check_user_password(self, login: str, plain_password: str):
         user = await self.get_user_by_login(login)
