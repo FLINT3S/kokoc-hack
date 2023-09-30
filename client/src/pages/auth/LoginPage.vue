@@ -40,7 +40,7 @@
 <script lang="ts" setup>
 import {reactive, ref} from "vue";
 
-import {VisibilityFilled, VisibilityOffFilled} from "@vicons/material"
+import {VisibilityFilled, VisibilityOffFilled} from "@components/icons"
 import {axiosInstance} from "@data/api/axiosInstance.ts";
 import {useRouter} from "vue-router";
 import {useUserStore} from "@data/store/userStore.ts";

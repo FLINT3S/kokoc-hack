@@ -93,3 +93,13 @@ class FundService:
             await session.refresh(user)
 
             return user
+
+    async def get_fund_by_id(self, fund_id: int):
+        async with AsyncSession(self.database_service.engine) as session:
+            st = select(Fund) \
+                .where(Fund.id == fund_id) \
+                .limit(1)
+            result = (await session.execute(st)).first()
+
+            if result:
+                return result[0]

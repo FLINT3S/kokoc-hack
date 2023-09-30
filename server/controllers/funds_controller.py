@@ -32,3 +32,8 @@ async def get_all_canceled():
 @funds_router.post("/moderate")
 async def moderate(fund_moderate_dto: FundModerateDTO):
     return await funds_service.moderate(fund_moderate_dto.fund_id, fund_moderate_dto.status)
+
+
+@funds_router.get("/get/{fund_id}")
+async def get_all_canceled(fund_id: int):
+    return await funds_service.get_fund_by_id(fund_id)
