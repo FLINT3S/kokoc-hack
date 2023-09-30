@@ -12,10 +12,6 @@ from services.service import APIService
 database_service = DatabaseService(
     f"postgresql+asyncpg://{os.environ['POSTGRES_USER']}:{os.environ['POSTGRES_PASSWORD']}@81.200.149.171:5432/{os.environ['POSTGRES_DB']}")
 
-# TODO убрать на проде
-role_service = RoleService(database_service)
-role_service.drop_and_init_default_data()
-
 api = APIService(database_service)
 
 
@@ -23,6 +19,9 @@ api = APIService(database_service)
 async def init_db():
     async with database_service.engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
+        # TODO убрать на проде
+        role_service = RoleService(database_service)
+        await role_service.drop_and_init_default_data()
 
 
 @api.app.get("/api/status")
