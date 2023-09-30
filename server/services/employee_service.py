@@ -88,3 +88,18 @@ class EmployeeService:
             await session.refresh(user)
 
             return user
+
+    async def change_division(self, employee_id: int, division_id: int):
+        async with AsyncSession(self.database_service.engine) as session:
+            st = select(Employee) \
+                .where(Employee.id == employee_id) \
+                .limit(1)
+
+            employee = (await session.execute(st)).first()[0]
+            employee.division_id = division_id
+
+            session.add(employee)
+            await session.commit()
+            await session.refresh(employee)
+
+            return employee
