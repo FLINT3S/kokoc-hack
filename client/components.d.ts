@@ -12,7 +12,6 @@ declare module 'vue' {
     CorporateFareOutlined: typeof import('./src/components/icons/CorporateFareOutlined.vue')['default']
     DarkModeFilled: typeof import('./src/components/icons/DarkModeFilled.vue')['default']
     EmptyLayout: typeof import('./src/components/layout/EmptyLayout.vue')['default']
-    FilledDarkModeFilled: typeof import('@components/icons/DarkModeFilled.vue')['default']
     FormatListNumberedFilled: typeof import('./src/components/icons/FormatListNumberedFilled.vue')['default']
     FundRegistration: typeof import('./src/components/auth/FundRegistration.vue')['default']
     GroupsFilled: typeof import('./src/components/icons/GroupsFilled.vue')['default']
@@ -54,6 +53,5 @@ declare module 'vue' {
     UserRegistration: typeof import('./src/components/auth/UserRegistration.vue')['default']
     VisibilityFilled: typeof import('./src/components/icons/VisibilityFilled.vue')['default']
     VisibilityOffFilled: typeof import('./src/components/icons/VisibilityOffFilled.vue')['default']
-    VisibilityOffFilledDarkModeFilled: typeof import('./src/components/icons/VisibilityOffFilledDarkModeFilled.vue')['default']
   }
 }
