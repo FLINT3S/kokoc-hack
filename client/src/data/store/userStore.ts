@@ -2,7 +2,7 @@ import {defineStore} from "pinia";
 import {CurrentUser} from "@data/models/CurrentUser.ts";
 import {axiosInstance} from "@data/api/axiosInstance.ts";
 
-export const userUserStore = defineStore('user', {
+export const useUserStore = defineStore('user', {
   state(): {
     currentUser: CurrentUser | null,
     token: string | null,

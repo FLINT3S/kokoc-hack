@@ -1,6 +1,6 @@
 <template>
   <div class="content-container">
-    <n-tabs type="segment">
+    <n-tabs type="segment" v-if="userStore?.currentUser?.role === 'superadmin'">
       <n-tab-pane name="oasis" tab="Одобренные фонды">
         <n-space vertical>
           <n-input v-model:value="filterQuery" placeholder="Поиск по фондам"/>
@@ -72,6 +72,13 @@
         </div>
       </n-tab-pane>
     </n-tabs>
+
+    <n-space vertical v-else>
+          <n-input v-model:value="filterQuery" placeholder="Поиск по фондам"/>
+
+          <n-data-table :columns="fundsColumns" :data="filteredFunds" :loading="fundsStore.loading"
+                        :pagination="{pageSize: 5}"/>
+        </n-space>
   </div>
 </template>
 
@@ -83,8 +90,10 @@ import {router} from "@/app/router";
 import {axiosInstance} from "@data/api/axiosInstance.ts";
 import {useFundsStore} from "@data/store/fundsStore.ts";
 import {Fund} from "@data/types/fund.ts";
+import {useUserStore} from "@data/store/userStore.ts";
 
 const fundsStore = useFundsStore()
+const userStore = useUserStore()
 
 const dialog = useDialog()
 const message = useMessage()

@@ -43,7 +43,7 @@ import {reactive, ref} from "vue";
 import {VisibilityFilled, VisibilityOffFilled} from "@vicons/material"
 import {axiosInstance} from "@data/api/axiosInstance.ts";
 import {useRouter} from "vue-router";
-import {userUserStore} from "@data/store/userStore.ts";
+import {useUserStore} from "@data/store/userStore.ts";
 
 const loginData = reactive({
   login: "",
@@ -54,7 +54,7 @@ const router = useRouter();
 const loginError = ref('');
 const isLoading = ref(false);
 
-const userStore = userUserStore();
+const userStore = useUserStore();
 
 const submitLogin = () => {
   isLoading.value = true

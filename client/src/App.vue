@@ -28,11 +28,11 @@ import {darkTheme, dateRuRU, lightTheme, ruRU} from "naive-ui";
 
 import themeOverrides from "@/app/style/naive-ui-theme-overrides.json"
 import EmptyLayout from "@components/layout/EmptyLayout.vue";
-import {userUserStore} from "@data/store/userStore.ts";
+import {useUserStore} from "@data/store/userStore.ts";
 
 const route = useRoute()
 const router = useRouter()
-const userStore = userUserStore()
+const userStore = useUserStore()
 
 
 const layout = computed(() => {
