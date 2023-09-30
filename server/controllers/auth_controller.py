@@ -48,6 +48,7 @@ async def company_registration(company_reg_dto: CompanyRegDTO):
     }
 
 
+
 @auth_router.post("/check")
 async def check(token_data: CheckTokenDTO):
     decoded = jwt_service.check_jwt(token_data.accessToken)
