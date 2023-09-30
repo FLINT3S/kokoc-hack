@@ -13,11 +13,11 @@ class RoleService:
 
     async def drop_and_init_default_data(self):
         async with AsyncSession(self.database_service.engine) as session:
-            st = select(Role)
-            results = (await session.execute(st))
-            for value in results:
-                await session.delete(value[0])
-                await session.commit()
+            # st = select(Role)
+            # results = (await session.execute(st))
+            # for value in results:
+            #     await session.delete(value[0])
+            #     await session.commit()
             for role in RoleEnum.list():
                 await self.database_service.save(Role(id=role.id, name=role.value))
                 await session.commit()
