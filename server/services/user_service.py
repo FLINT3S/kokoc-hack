@@ -40,6 +40,7 @@ class UserService:
 
     async def check_user_password(self, login: str, plain_password: str):
         user = await self.get_user_by_login(login)
+        print(user.login)
         if not user:
             raise HTTPException(401, "Неверный логин или пароль")
 
