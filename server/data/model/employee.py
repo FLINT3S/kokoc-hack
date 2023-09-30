@@ -4,7 +4,7 @@ from sqlmodel import SQLModel, Field, Relationship
 
 from data.model.division import Division
 from data.model.activity import Activity
-from data.model.activity import ActivityRequest
+from data.model.activity_request import ActivityRequest
 
 
 class Employee(SQLModel, table=True):
