@@ -42,7 +42,7 @@ async def login(login_data: LoginDataDTO):
 async def company_registration(company_reg_dto: CompanyRegDTO):
     user = await user_service.create_user(login=company_reg_dto.login, plain_password=company_reg_dto.password,
                                           role_id=RoleEnum.COMPANYADMIN.id)
-    company = await company_service.create_company(user_id=user.id, name=company_reg_dto.name)
+    company = await company_service.create_company(user_id=user.id, title=company_reg_dto.title)
 
     return {
         "accessToken": jwt_service.generate_jwt(user.id),
@@ -51,11 +51,11 @@ async def company_registration(company_reg_dto: CompanyRegDTO):
     }
 
 @auth_router.post("/user-registration")
-async def company_registration(employee_reg_dto: EmployeeRegDTO):
+async def user_registration(employee_reg_dto: EmployeeRegDTO):
     user = await user_service.create_user(login=employee_reg_dto.login, plain_password=employee_reg_dto.password,
                                           role_id=RoleEnum.USER.id)
     employee = await employee_service.create_employee(user_id=user.id, name=employee_reg_dto.name, surname=employee_reg_dto.surname,
-                                                      company_id=employee_reg_dto.companyId, division_id=employee_reg_dto.divisionId)
+                                                      division_id=employee_reg_dto.divisionId)
 
     return {
         "accessToken": jwt_service.generate_jwt(user.id),

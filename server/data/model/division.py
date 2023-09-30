@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from sqlmodel import SQLModel, Field, Relationship
 
@@ -11,3 +11,4 @@ class Division(SQLModel, table=True):
     company: Optional["Company"] = Relationship(
         back_populates="divisions"
     )
+    employees: List["Employee"] = Relationship(back_populates="division")
