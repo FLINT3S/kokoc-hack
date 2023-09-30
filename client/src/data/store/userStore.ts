@@ -8,7 +8,7 @@ export const userUserStore = defineStore('user', {
     theme: 'light' | 'dark'
   } {
     return {
-      currentUser: new CurrentUser('user'),
+      currentUser: new CurrentUser('superadmin'),
       token: null,
       theme: 'light'
     }

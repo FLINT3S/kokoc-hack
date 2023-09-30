@@ -51,7 +51,7 @@
       >
         <main style="min-height: calc(100vh - 64px)">
           <div class="d-flex flex-column">
-            <main style="padding: 24px; min-height: calc(100vh - 151px)">
+            <main style="padding: 12px; min-height: calc(100vh - 127px)">
               <slot></slot>
             </main>
 
