@@ -13,7 +13,12 @@ division_service = DivisionService(database_service)
 
 
 @division_router.post("/create")
-async def user_registration(division_dto: DivisionDTO):
+async def create_division(division_dto: DivisionDTO):
     division = await division_service.create_division(title=division_dto.title, company_id=division_dto.company_id)
 
     return {}
+
+
+@division_router.get("/get-all/{company_id}")
+async def get_divisions(company_id: int):
+    return await division_service.get_divisions_by_company_id(company_id=company_id)
