@@ -1,3 +1,5 @@
+from sqlalchemy.orm import selectinload
+
 from data.database_service import DatabaseService
 from data.model.employee import Employee
 from sqlmodel import select
@@ -20,14 +22,14 @@ class EmployeeService:
 
     async def get_all_employees(self):
         async with AsyncSession(self.database_service.engine) as session:
-            st = select(Employee)
+            st = select(Employee).options(selectinload(Employee.division))
             results = (await session.execute(st))
 
             return [dict(row.Employee) for row in results]
 
     async def get_all_moderating_employees(self):
         async with AsyncSession(self.database_service.engine) as session:
-            st = select(Employee)
+            st = select(Employee).options(selectinload(Employee.division))
             result = (await session.execute(st)).all()
 
             user_service = UserService(database_service=self.database_service)
@@ -36,12 +38,18 @@ class EmployeeService:
             for row in result:
                 user = await user_service.get_user_by_id(row.Employee.user_id)
                 if (user.user_status_id == UserStatusEnum.MODERATION.id):
-                    listResult.append(row.Employee)
+                    listResult.append({
+                        "id": row.Employee.id,
+                        "name": row.Employee.name,
+                        "surname": row.Employee.surname,
+                        "division": row.Employee.division,
+                        "requestedAt": user.date
+                    })
             return listResult
 
     async def get_all_approved_employees(self):
         async with AsyncSession(self.database_service.engine) as session:
-            st = select(Employee)
+            st = select(Employee).options(selectinload(Employee.division))
             result = (await session.execute(st)).all()
 
             user_service = UserService(database_service=self.database_service)
@@ -50,12 +58,18 @@ class EmployeeService:
             for row in result:
                 user = await user_service.get_user_by_id(row.Employee.user_id)
                 if (user.user_status_id == UserStatusEnum.APPROVED.id):
-                    listResult.append(row.Employee)
+                    listResult.append({
+                        "id": row.Employee.id,
+                        "name": row.Employee.name,
+                        "surname": row.Employee.surname,
+                        "division": row.Employee.division,
+                        "requestedAt": user.date
+                    })
             return listResult
 
     async def get_all_canceled_employees(self):
         async with AsyncSession(self.database_service.engine) as session:
-            st = select(Employee)
+            st = select(Employee).options(selectinload(Employee.division))
             result = (await session.execute(st)).all()
 
             user_service = UserService(database_service=self.database_service)
@@ -64,7 +78,13 @@ class EmployeeService:
             for row in result:
                 user = await user_service.get_user_by_id(row.Employee.user_id)
                 if (user.user_status_id == UserStatusEnum.CANCELED.id):
-                    listResult.append(row.Employee)
+                    listResult.append({
+                        "id": row.Employee.id,
+                        "name": row.Employee.name,
+                        "surname": row.Employee.surname,
+                        "division": row.Employee.division,
+                        "requestedAt": user.date
+                    })
             return listResult
 
     async def moderate(self, employee_id: int, status: bool):

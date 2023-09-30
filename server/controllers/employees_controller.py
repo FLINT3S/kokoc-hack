@@ -1,8 +1,11 @@
 import os
+from typing import List
 
 from fastapi import APIRouter
 
+from controllers.dto.get_employee_division_response_dto import GetEmployeeDivisionResponseDTO
 from data.database_service import DatabaseService
+from data.model.employee import Employee
 
 from services.employee_service import EmployeeService
 
@@ -26,7 +29,7 @@ async def get_all_moderation():
     return await employee_service.get_all_moderating_employees()
 
 
-@employees_router.get("/get-all-approved")
+@employees_router.get("/get-all-approved", response_model=List[GetEmployeeDivisionResponseDTO])
 async def get_all_approved():
     return await employee_service.get_all_approved_employees()
 

@@ -38,7 +38,7 @@
             </n-gi>
           </n-grid>
         </n-spin>
-        <div class="mt-3 text-center">
+        <div v-else class="mt-3 text-center">
           Нет фондов на модерации
         </div>
       </n-tab-pane>
@@ -67,7 +67,7 @@
             </n-gi>
           </n-grid>
         </n-spin>
-        <div class="mt-3 text-center">
+        <div v-else class="mt-3 text-center">
           Нет отклоненных компаний
         </div>
       </n-tab-pane>
