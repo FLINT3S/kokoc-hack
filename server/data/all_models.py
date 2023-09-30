@@ -4,4 +4,4 @@ from data.model.company import Company
 from data.model.division import Division
 from data.model.employee import Employee
 from data.model.fund import Fund
-from data.model.superadmin import Superadmin
+from data.model.superadmin import SuperAdmin
