@@ -30,6 +30,10 @@
       </n-input>
     </n-form-item>
 
+    <n-collapse-transition :show="!!regError" class="mb-3 text-center">
+      <span class="text-danger">{{ regError }}</span>
+    </n-collapse-transition>
+
     <n-button :disabled="isSubmitDisabled" block size="large" type="primary" @click="onClickSubmitCompanyRegistration">
       Создать аккаунт
     </n-button>
@@ -95,8 +99,7 @@ const onClickSubmitCompanyRegistration = () => {
         axiosInstance.defaults.headers['Authorization'] = `Bearer ${res.data.accessToken}`
         localStorage.setItem('userData', JSON.stringify({userId: res.data.user.id, token: res.data.accessToken}))
         userStore.currentUser = new CurrentUser(res.data);
-        console.log(userStore.currentUser)
-        router.replace('/');
+        router.replace('/auth/moderation');
       })
       .catch((err: any) => {
         regError.value = `Ошибка регистрации: ${err?.response?.data?.detail || 'неизвестная ошибка'}`

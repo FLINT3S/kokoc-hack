@@ -2,7 +2,7 @@
   <n-collapse-transition :show="!collapsed">
     <div class="p-2">
       <n-card size="small">
-        <div class="d-flex justify-content-center align-items-center flex-column">
+        <div class="d-flex justify-content-center align-items-center flex-column text-center">
           <n-avatar :size="100" circle object-fit="cover" src="https://cataas.com/cat?width=200"/>
 
           <h3 class="m-0 mt-2">{{ userStore.currentUser?.displayName }}</h3>
