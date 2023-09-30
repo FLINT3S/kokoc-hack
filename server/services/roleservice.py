@@ -19,5 +19,5 @@ class RoleService:
                 await session.delete(value[0])
                 await session.commit()
             for role in RoleEnum.list():
-                await self.database_service.save(Role(id=role.id, name=role.__str__()))
+                await self.database_service.save(Role(id=role.id, name=role.name))
                 await session.commit()
