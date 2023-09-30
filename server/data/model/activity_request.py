@@ -7,7 +7,7 @@ class ActivityRequest(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     employee_id: int = Field(foreign_key="employee.id")
     employee: Optional["Employee"] = Relationship(
-        back_populates="activities"
+        back_populates="activities_requests"
     )
     training_information: str = Field(default=None, nullable=False)
     adding_kilocalories_count: int = Field(default=None, nullable=False)

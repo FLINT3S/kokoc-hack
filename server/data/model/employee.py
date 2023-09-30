@@ -4,6 +4,8 @@ from sqlmodel import SQLModel, Field, Relationship
 
 from data.model.division import Division
 from data.model.activity import Activity
+from data.model.activity import ActivityRequest
+
 
 class Employee(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -16,3 +18,4 @@ class Employee(SQLModel, table=True):
     )
 
     activities: List["Activity"] = Relationship(back_populates="employee")
+    activities_requests: List["ActivityRequest"] = Relationship(back_populates="employee")
