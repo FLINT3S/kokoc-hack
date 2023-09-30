@@ -1,10 +1,10 @@
 from sqlalchemy import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from data.databaseservice import DatabaseService
-
 from data.model.role import Role
 from data.model.role import RoleEnum
+
+from data.databaseservice import DatabaseService
 
 
 class RoleService:
