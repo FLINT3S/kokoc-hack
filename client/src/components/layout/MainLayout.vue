@@ -1,21 +1,18 @@
 <template>
   <n-layout style="height: 100vh">
     <n-layout-header bordered style="height: 64px; padding: 2px">
-      <section class="container py-2 d-flex justify-content-between align-items-center">
-        <router-link class="d-flex text-decoration-none" to="/">
-          <div class="text-center my-auto lh-1 ms-2">
-            <h1 class="app-title my-0">
-              FitApp
-            </h1>
-          </div>
-        </router-link>
-
-        <menu class="m-0 p-0 d-flex gap-3">
-
-        </menu>
+      <section class="container py-2 px-3 d-flex justify-content-between align-items-center">
+        <div class="text-center my-auto lh-1 ms-2" @click="$router.push('/')">
+          <h1 class="app-title my-0">
+            <CMLogo :icon-width="42" class="top-bar-logo"/>
+          </h1>
+        </div>
 
         <div class="d-flex align-items-center">
-
+          <n-button @click="userStore.toggleTheme()">
+            <n-icon v-if="userStore.theme === 'dark'" :component="LightModeFilled"/>
+            <n-icon v-else :component="DarkModeFilled"/>
+          </n-button>
         </div>
       </section>
     </n-layout-header>
@@ -26,12 +23,27 @@
         style="top: 64px; bottom: 64px; height: calc(100% - 64px)"
     >
       <n-layout-sider
-          show-trigger
+          v-model:collapsed="isMenuCollapsed"
+          :collapsed-width="64"
           :native-scrollbar="false"
           bordered
-          content-style="padding: 24px;"
+          collapse-mode="width"
+          content-style="height: 100%; display: flex; flex-direction: column"
+          show-trigger
       >
-        <p v-for="i in 100">{{ i }}</p>
+        <SideMenu :collapsed="isMenuCollapsed"/>
+
+        <div class="mt-auto p-2">
+          <n-collapse-transition :show="!isMenuCollapsed">
+            <n-button block type="error">
+              Выйти
+
+              <template #icon>
+                <n-icon :component="LogOutFilled"/>
+              </template>
+            </n-button>
+          </n-collapse-transition>
+        </div>
       </n-layout-sider>
 
       <n-layout
@@ -39,7 +51,7 @@
       >
         <main style="min-height: calc(100vh - 64px)">
           <div class="d-flex flex-column">
-            <main style="padding: 24px; min-height: calc(100vh - 151px)">
+            <main style="padding: 12px; min-height: calc(100vh - 127px)">
               <slot></slot>
             </main>
 
@@ -62,4 +74,19 @@
 </template>
 
 <script lang="ts" setup>
+import {ref} from 'vue'
+import CMLogo from "@components/CMLogo.vue";
+import SideMenu from "@components/menu/SideMenu.vue";
+import {DarkModeFilled, LightModeFilled, LogOutFilled} from '@vicons/material'
+import {userUserStore} from "@data/store/userStore.ts";
+
+const userStore = userUserStore()
+
+const isMenuCollapsed = ref(false);
 </script>
+
+<style>
+.top-bar-logo h1 {
+  font-size: 24px;
+}
+</style>
