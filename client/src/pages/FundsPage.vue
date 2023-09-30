@@ -1,80 +1,136 @@
 <template>
   <div class="content-container">
     <n-tabs type="segment">
-      <n-tab-pane name="oasis" tab="Одобренные компании">
+      <n-tab-pane name="oasis" tab="Одобренные фонды">
         <n-space vertical>
-          <n-input placeholder="Поиск по компаниям"/>
+          <n-input v-model:value="filterQuery" placeholder="Поиск по фондам"/>
 
-          <n-data-table :columns="companiesColumns" :data="filteredCompanies"/>
+          <n-data-table :columns="fundsColumns" :data="filteredFunds" :loading="fundsStore.loading"
+                        :pagination="{pageSize: 5}"/>
         </n-space>
       </n-tab-pane>
 
-      <n-tab-pane name="the beatles" tab="На модерации">
-        <n-grid :x-gap="10" :y-gap="10" cols="1 400:2 800:3">
-          <n-gi v-for="company in companiesStore.companiesOnModeration">
-            <n-card size="small" :title="company.title">
-              <template #header-extra>
-                {{ company.requestedAt }}
-              </template>
+      <n-tab-pane name="moderation" tab="На модерации">
+        <n-spin v-if="fundsStore.fundsOnModeration.length && !fundsStore.loadingModeration"
+                :show="fundsStore.loadingModeration"
+                class="mt-3">
+          <n-grid :x-gap="10" :y-gap="10" cols="1 400:2 800:3">
+            <n-gi v-for="fund in fundsStore.fundsOnModeration">
+              <n-card :title="fund.title" size="small">
+                <template #header-extra>
+                  {{
+                    new Date(fund.requestedAt).toLocaleDateString() + ' в ' + new Date(fund.requestedAt).getHours() + ':' + new Date(fund.requestedAt).getMinutes()
+                  }}
+                </template>
 
-              <template #action>
-                <n-space>
-                  <n-button secondary type="primary" @click="onClickAcceptCompany(company)">
-                    Одобрить
-                  </n-button>
+                <template #action>
+                  <n-space>
+                    <n-button secondary type="primary" @click="onClickAcceptFund(fund)">
+                      Одобрить
+                    </n-button>
 
-                  <n-button type="error" @click="onClickRejectCompany(company)">
-                    Отклонить
-                  </n-button>
-                </n-space>
-              </template>
-            </n-card>
-          </n-gi>
-        </n-grid>
+                    <n-button type="error" @click="onClickRejectFund(fund)">
+                      Отклонить
+                    </n-button>
+                  </n-space>
+                </template>
+              </n-card>
+            </n-gi>
+          </n-grid>
+        </n-spin>
+        <div class="mt-3 text-center">
+          Нет фондов на модерации
+        </div>
+      </n-tab-pane>
+
+      <n-tab-pane name="rejected" tab="Отклоненные">
+        <n-spin v-if="fundsStore.fundsRejected.length && !fundsStore.loadingRejected"
+                :show="fundsStore.loadingRejected"
+                class="mt-3">
+          <n-grid :x-gap="10" :y-gap="10" cols="1 400:2 800:3">
+            <n-gi v-for="fund in fundsStore.fundsRejected">
+              <n-card :title="fund.title" size="small">
+                <template #header-extra>
+                  {{
+                    new Date(fund.requestedAt).toLocaleDateString() + ' в ' + new Date(fund.requestedAt).getHours() + ':' + new Date(fund.requestedAt).getMinutes()
+                  }}
+                </template>
+
+                <template #action>
+                  <n-space>
+                    <n-button secondary type="primary" @click="onClickAcceptFund(fund)">
+                      Одобрить
+                    </n-button>
+                  </n-space>
+                </template>
+              </n-card>
+            </n-gi>
+          </n-grid>
+        </n-spin>
+        <div class="mt-3 text-center">
+          Нет отклоненных компаний
+        </div>
       </n-tab-pane>
     </n-tabs>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {h, ref, computed} from 'vue'
+import {computed, h, ref} from 'vue'
 import {DataTableColumn, NButton, useDialog, useMessage} from 'naive-ui';
-import {useCompaniesStore} from "@data/store/companiesStore.ts";
 import {Company} from "@data/types/company.ts";
+import {router} from "@/app/router";
+import {axiosInstance} from "@data/api/axiosInstance.ts";
+import {useFundsStore} from "@data/store/fundsStore.ts";
+import {Fund} from "@data/types/fund.ts";
 
-const companiesStore = useCompaniesStore()
+const fundsStore = useFundsStore()
 
 const dialog = useDialog()
 const message = useMessage()
 
-const onClickAcceptCompany = (company: Company) => {
+const onClickAcceptFund = (fund: Fund) => {
   dialog.create({
-    title: `Принять ${company.title}?`,
+    title: `Принять ${fund.title}?`,
     positiveText: 'Принять заявку',
     negativeText: 'Отмена',
-    onPositiveClick: () => {
+    onPositiveClick: async () => {
+      await axiosInstance.post('/funds/moderate', {fund_id: fund.id, status: true})
+      await fetchAll()
       message.success('Принято!')
     }
   })
 }
 
-const onClickRejectCompany = (company: Company) => {
+const onClickRejectFund = (fund: Company) => {
   dialog.error({
-    title: `Отклонить ${company.title}?`,
+    title: `Отклонить ${fund.title}?`,
     positiveText: 'Отклонить заявку',
     negativeText: 'Отмена',
-    onPositiveClick: () => {
+    onPositiveClick: async () => {
+      await axiosInstance.post('/funds/moderate', {fund_id: fund.id, status: false})
+      await fetchAll()
       message.error('Заявка отклонена')
     }
   })
 }
 
 const filterQuery = ref('')
-const filteredCompanies = computed(() => {
-  return companiesStore.companies.filter(c => c.title.toLowerCase().includes(filterQuery.value.toLowerCase()))
+const filteredFunds = computed(() => {
+  return fundsStore.funds.filter(c => c.title.toLowerCase().includes(filterQuery.value.toLowerCase()))
 })
 
-const companiesColumns: DataTableColumn[] = [
+const fetchAll = async () => {
+  await Promise.all([
+    fundsStore.fetchFunds(),
+    fundsStore.fetchFundsOnModeration(),
+    fundsStore.fetchFundsRejected()
+  ])
+}
+
+fetchAll()
+
+const fundsColumns: DataTableColumn[] = [
   {
     title: '#',
     key: 'index',
@@ -87,21 +143,27 @@ const companiesColumns: DataTableColumn[] = [
     key: 'title',
   },
   {
-    title: 'Число сотрудников',
-    key: 'employeesNumber'
+    title: 'Заявка подана',
+    key: 'requestedAt',
+    sorter: (row1: any, row2: any) => row1.requestedAt - row2.requestedAt,
+    render: (row: any, _) => {
+      return new Date(row.requestedAt).toLocaleDateString() + ' в ' + new Date(row.requestedAt).getHours() + ':' + new Date(row.requestedAt).getMinutes()
+    }
   },
   {
     title: 'Перейти на страницу',
     key: 'goto',
-    render: () => {
+    render: (row, _) => {
       return h(
           NButton,
           {
             size: 'small',
-            onClick: () => {}
+            onClick: () => {
+              router.push('/funds/' + row.id)
+            }
           },
-          { default: () => 'Открыть компанию' }
-        )
+          {default: () => 'Открыть фонд'}
+      )
     }
   }
 ]
