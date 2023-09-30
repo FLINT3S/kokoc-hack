@@ -6,17 +6,31 @@ export const useCompaniesStore = defineStore('companies', {
   state() {
     return {
       companies: [] as Company[],
-      companiesOnModeration: [] as Company[]
+      companiesOnModeration: [] as Company[],
+      companiesRejected: [] as Company[],
+      loadingRejected: false,
+      loading: false,
+      loadingModeration: false
     }
   },
   actions: {
     async fetchCompanies() {
-      const data = await axiosInstance.get('/companies')
+      this.loading = true
+      const data = await axiosInstance.get('/companies/get-all-approved')
       this.companies = data.data
+      this.loading = false
     },
     async fetchCompaniesOnModeration() {
-      const data = await axiosInstance.get('/companies-on-moderation')
+      this.loadingModeration = true
+      const data = await axiosInstance.get('/companies/get-all-moderation')
       this.companiesOnModeration = data.data
+      this.loadingModeration = false
+    },
+        async fetchCompaniesRejected() {
+      this.loadingModeration = true
+      const data = await axiosInstance.get('/companies/get-all-canceled')
+      this.companiesRejected = data.data
+      this.loadingModeration = false
     }
   }
 })

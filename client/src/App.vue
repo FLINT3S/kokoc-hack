@@ -48,8 +48,6 @@ userStore.initTheme()
 onMounted(async () => {
   if (!await userStore.initUser()) {
     await router.replace('/auth')
-  } else {
-    await router.replace('/')
   }
 })
 </script>

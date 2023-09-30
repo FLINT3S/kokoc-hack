@@ -8,10 +8,12 @@ export const router = createRouter({
 })
 
 
-router.beforeEach((to, _, next) => {
+router.beforeEach(async (to, _, next) => {
   const userStore = userUserStore()
-  if (!userStore.currentUser && !to.path.includes('auth')) {
+  if (!userStore.currentUser && !to.path.includes('auth') && !(await userStore.initUser())) {
     next('/auth')
+  } else if (userStore.currentUser?.id && to.path.includes('auth')) {
+    next('/')
   } else {
     next()
   }
