@@ -65,7 +65,7 @@ const submitLogin = () => {
         if (await userStore.initUser()) {
           await router.replace('/');
         } else {
-          loginError.value = 'Ошибка логина'
+          await router.replace('/auth/moderation');
         }
       })
       .catch((err: any) => {

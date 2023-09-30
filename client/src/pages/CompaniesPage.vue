@@ -107,7 +107,7 @@ const onClickRejectCompany = (company: Company) => {
     positiveText: 'Отклонить заявку',
     negativeText: 'Отмена',
     onPositiveClick: async () => {
-      await axiosInstance.post('/companies/moderate', {company_id: company.id, status: true})
+      await axiosInstance.post('/companies/moderate', {company_id: company.id, status: false})
       await fetchAll()
       message.error('Заявка отклонена')
     }

@@ -99,8 +99,8 @@ const onClickSubmitCompanyRegistration = () => {
         axiosInstance.defaults.headers['Authorization'] = `Bearer ${res.data.accessToken}`
         localStorage.setItem('userData', JSON.stringify({userId: res.data.user.id, token: res.data.accessToken}))
         userStore.currentUser = new CurrentUser(res.data);
-        console.log(userStore.currentUser)
-        router.replace('/');
+        router.replace('/auth/moderation');
+
       })
       .catch((err: any) => {
         regError.value = `Ошибка регистрации: ${err?.response?.data?.detail || 'неизвестная ошибка'}`

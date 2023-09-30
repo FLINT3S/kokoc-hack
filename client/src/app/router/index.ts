@@ -12,7 +12,7 @@ router.beforeEach(async (to, _, next) => {
   const userStore = userUserStore()
   if (!userStore.currentUser && !to.path.includes('auth') && !(await userStore.initUser())) {
     next('/auth')
-  } else if (userStore.currentUser?.id && to.path.includes('auth')) {
+  } else if (userStore.currentUser?.id && to.path.includes('auth') && await userStore.initUser()) {
     next('/')
   } else {
     next()

@@ -49,7 +49,7 @@ async def company_registration(company_reg_dto: CompanyRegDTO):
     user = await user_service.get_user_by_login(company_reg_dto.login)
 
     if (user):
-        return HTTPException(401, "Пользователь с таким логином уже существует")
+        raise HTTPException(401, "Пользователь с таким логином уже существует")
 
     user = await user_service.create_user(login=company_reg_dto.login, plain_password=company_reg_dto.password,
                                           role_id=RoleEnum.COMPANYADMIN.id)
@@ -66,7 +66,7 @@ async def user_registration(employee_reg_dto: EmployeeRegDTO):
     user = await user_service.get_user_by_login(employee_reg_dto.login)
 
     if (user):
-        return HTTPException(401, "Пользователь с таким логином уже существует")
+        raise HTTPException(401, "Пользователь с таким логином уже существует")
 
     user = await user_service.create_user(login=employee_reg_dto.login, plain_password=employee_reg_dto.password,
                                           role_id=RoleEnum.USER.id)
@@ -84,7 +84,7 @@ async def fund_registration(fund_reg_dto: FundRegDTO):
     user = await user_service.get_user_by_login(fund_reg_dto.login)
 
     if (user):
-        return HTTPException(401, "Пользователь с таким логином уже существует")
+        raise HTTPException(401, "Пользователь с таким логином уже существует")
 
     user = await user_service.create_user(login=fund_reg_dto.login, plain_password=fund_reg_dto.password,
                                           role_id=RoleEnum.FUNDADMIN.id)
@@ -106,7 +106,7 @@ async def check(token_data: CheckTokenDTO):
     user = await user_service.get_user_by_id(int(decoded.get("user_id")))
 
     if (user.user_status_id == UserStatusEnum.MODERATION.id):
-        return HTTPException(401, "Пользователь на модерации")
+        raise HTTPException(401, "Пользователь на модерации")
 
     entity = await user_service.get_user_entity(int(decoded.get("user_id")))
 

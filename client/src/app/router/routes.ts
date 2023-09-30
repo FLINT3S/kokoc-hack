@@ -4,7 +4,8 @@ import AuthPage from "@/pages/auth/AuthPage.vue";
 import MainLayout from "@components/layout/MainLayout.vue";
 import RegisterPage from "@/pages/auth/RegisterPage.vue";
 import LoginPage from "@/pages/auth/LoginPage.vue";
-import MyCompanyPage from "@/pages/MyCompanyPage.vue";
+import ModerationPage from "@/pages/auth/ModeartionPage.vue";
+import MyCompanyPage from "@/pages/SingleCompanyPage.vue";
 import PersonalPage from "@/pages/PersonalPage.vue";
 import LeaderBoardPage from "@/pages/LeaderBoardPage.vue";
 import CompaniesPage from "@/pages/CompaniesPage.vue";
@@ -30,6 +31,10 @@ export const routes: RouteRecordRaw[] = [
       {
         path: 'login',
         component: LoginPage
+      },
+      {
+        path: 'moderation',
+        component: ModerationPage
       }
     ]
   },
