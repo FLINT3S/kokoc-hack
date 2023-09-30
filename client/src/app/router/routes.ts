@@ -5,14 +5,15 @@ import MainLayout from "@components/layout/MainLayout.vue";
 import RegisterPage from "@/pages/auth/RegisterPage.vue";
 import LoginPage from "@/pages/auth/LoginPage.vue";
 import ModerationPage from "@/pages/auth/ModeartionPage.vue";
-import MyCompanyPage from "@/pages/SingleCompanyPage.vue";
-import SingleCompanyPage from "@/pages/SingleCompanyPage.vue";
-import PersonalPage from "@/pages/PersonalPage.vue";
+import MyCompanyPage from "@/pages/company/SingleCompanyPage.vue";
+import SingleCompanyPage from "@/pages/company/SingleCompanyPage.vue";
+import EmployeesPage from "@/pages/employee/EmployeesPage.vue";
 import LeaderBoardPage from "@/pages/LeaderBoardPage.vue";
-import CompaniesPage from "@/pages/CompaniesPage.vue";
-import FundsPage from "@/pages/FundsPage.vue";
-import SingleFundPage from "@/pages/SingleFundPage.vue";
-import SingleDivisionPage from "@/pages/SingleDivisionPage.vue";
+import CompaniesPage from "@/pages/company/CompaniesPage.vue";
+import FundsPage from "@/pages/fund/FundsPage.vue";
+import SingleFundPage from "@/pages/fund/SingleFundPage.vue";
+import SingleDivisionPage from "@/pages/division/SingleDivisionPage.vue";
+import SingleEmployeePage from "@/pages/employee/SingleEmployeePage.vue";
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -58,11 +59,20 @@ export const routes: RouteRecordRaw[] = [
     ]
   },
   {
-    path: '/personal',
-    component: PersonalPage,
+    path: '/employees',
     meta: {
       layout: MainLayout
-    }
+    },
+    children: [
+      {
+        path: '',
+        component: EmployeesPage,
+      },
+      {
+        path: ':id',
+        component: SingleEmployeePage
+      }
+    ]
   },
   {
     path: '/leaderboard',

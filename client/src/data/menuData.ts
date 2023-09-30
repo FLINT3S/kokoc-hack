@@ -51,12 +51,12 @@ export const menuOptions: (MenuOption & { roles: string [] })[] = [
         RouterLink,
         {
           to: {
-            path: '/personal',
+            path: '/employees',
           }
         },
         {default: () => 'Сотрудники'}
       ),
-    key: 'personal',
+    key: 'employees',
     icon: renderIcon(GroupsFilled),
     roles: ['superadmin', 'companyadmin']
   },

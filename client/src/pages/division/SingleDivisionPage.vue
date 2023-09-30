@@ -1,44 +1,47 @@
 <template>
-  <div>
-    <h2 v-if="!isLoading" class="text-center">Подразделение {{ companyItem?.title }} / {{ divisionItem?.title }}</h2>
-    <n-skeleton v-else text width="100%"/>
+  <div class="content-container">
+    <div>
+      <h2 v-if="!isLoading" class="text-center">Подразделение {{ companyItem?.title }} / {{ divisionItem?.title }}</h2>
+      <n-skeleton v-else text width="100%"/>
+    </div>
+
+    <n-data-table
+        :columns="employeeColumns"
+        :data="divisionItem?.employees"
+        :loading="isLoading"
+        :pagination="{pageSize: 10}"
+    />
+
+    <n-modal :show="isEmployeeManageModalShown" closable>
+      <n-card :title="'Управление пользователем ' + selectedEmployee?.name + ' ' + selectedEmployee?.surname"
+              class="card-md"
+              closable
+              @close="isEmployeeManageModalShown = false"
+      >
+        <n-form-item v-if="selectedEmployee" label="Подразделение">
+          <n-select v-model:value="selectedEmployee!.division_id" :options="divisions" label-field="title"
+                    value-field="id"/>
+        </n-form-item>
+
+        <template #action>
+          <n-space>
+            <n-button type="primary" @click="onClickSaveEmployee">
+              Сохранить
+            </n-button>
+
+            <n-button secondary>
+              Отменить
+            </n-button>
+          </n-space>
+        </template>
+      </n-card>
+    </n-modal>
   </div>
-
-  <n-data-table
-      :columns="employeeColumns"
-      :data="divisionItem?.employees"
-      :loading="isLoading"
-      :pagination="{pageSize: 10}"
-  />
-
-  <n-modal :show="isEmployeeManageModalShown" closable>
-    <n-card :title="'Управление пользователем ' + selectedEmployee?.name + ' ' + selectedEmployee?.surname"
-            class="card-md"
-            closable
-            @close="isEmployeeManageModalShown = false"
-    >
-      <n-form-item label="Подразделение" v-if="selectedEmployee">
-        <n-select v-model:value="selectedEmployee!.division_id" :options="divisions" label-field="title" value-field="id"/>
-      </n-form-item>
-
-      <template #action>
-        <n-space>
-          <n-button type="primary" @click="onClickSaveEmployee">
-            Сохранить
-          </n-button>
-
-          <n-button secondary>
-            Отменить
-          </n-button>
-        </n-space>
-      </template>
-    </n-card>
-  </n-modal>
 </template>
 
 <script lang="ts" setup>
 import {h, onBeforeMount, ref} from 'vue'
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {axiosInstance} from "@data/api/axiosInstance.ts";
 import {Company} from "@data/types/company.ts";
 import {Division} from "@data/types/division.ts";
@@ -46,6 +49,7 @@ import {DataTableColumn, NButton} from "naive-ui";
 
 
 const route = useRoute()
+const router = useRouter()
 
 
 const companyItem = ref<Company | null>(null)
@@ -109,11 +113,27 @@ const employeeColumns: DataTableColumn[] = [
           {
             size: 'small',
             onClick: () => {
-              selectedEmployee.value = row as { user_id: number; id: number; name: string; surname: string; division_id: number}
+              selectedEmployee.value = row as { user_id: number; id: number; name: string; surname: string; division_id: number }
               isEmployeeManageModalShown.value = true
             }
           },
           {default: () => 'Управление'}
+      )
+    }
+  },
+  {
+    title: 'Профиль',
+    key: 'goto',
+    render: (row, __) => {
+      return h(
+          NButton,
+          {
+            size: 'small',
+            onClick: () => {
+              router.push('/employees/' + row.id)
+            }
+          },
+          {default: () => 'Открыть профиль'}
       )
     }
   }

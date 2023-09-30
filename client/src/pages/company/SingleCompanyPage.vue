@@ -1,22 +1,23 @@
 <template>
-  <div>
+  <div class="content-container">
     <h2 class="text-center">Компания «{{ companyName }}»</h2>
 
     <div class="d-flex justify-content-end my-3">
-      <n-button type="primary" secondary @click="isAddDivisionModalShown = true">
+      <n-button secondary type="primary" @click="isAddDivisionModalShown = true">
         Добавить подразделение
       </n-button>
     </div>
 
-    <n-data-table :columns="divisionsColumns" :data="divisions" :pagination="{pageSize: 10}" :loading="isDivisionLoading"/>
+    <n-data-table :columns="divisionsColumns" :data="divisions" :loading="isDivisionLoading"
+                  :pagination="{pageSize: 10}"/>
 
-    <n-modal v-model:show="isAddDivisionModalShown" closable :loading="isDivisionLoading">
-      <n-card class="card-md" title="Добавить подразделение" closable @close="isAddDivisionModalShown = false">
-        <n-input placeholder="Название дивизиона" v-model:value="createDivisionTitle"/>
+    <n-modal v-model:show="isAddDivisionModalShown" :loading="isDivisionLoading" closable>
+      <n-card class="card-md" closable title="Добавить подразделение" @close="isAddDivisionModalShown = false">
+        <n-input v-model:value="createDivisionTitle" placeholder="Название дивизиона"/>
 
         <template #action>
           <n-space>
-            <n-button type="primary" :disabled="createDivisionTitle === ''" @click="onClickAddDivision">
+            <n-button :disabled="createDivisionTitle === ''" type="primary" @click="onClickAddDivision">
               Добавить
             </n-button>
 
