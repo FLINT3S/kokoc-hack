@@ -70,7 +70,7 @@ async def user_registration(employee_reg_dto: EmployeeRegDTO):
 
     user = await user_service.create_user(login=employee_reg_dto.login, plain_password=employee_reg_dto.password,
                                           role_id=RoleEnum.USER.id)
-    employee = await employee_service.create_employee(user_id=user.id, name=employee_reg_dto.name, surname=employee_reg_dto.surname,
+    employee = await employee_service.create_employee(user_id=user.id, name=employee_reg_dto.title, surname=employee_reg_dto.surname,
                                                       division_id=employee_reg_dto.divisionId)
 
     return {

@@ -1,8 +1,3 @@
-import datetime
-
-import bcrypt
-from fastapi import HTTPException
-
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -14,6 +9,11 @@ from data.model.division import Division
 class DivisionService:
     def __init__(self, database_service: DatabaseService):
         self.database_service = database_service
+
+    async def create_division(self, title: str, company_id: int):
+        created_division = Division(title=title, company_id=company_id)
+
+        return await self.database_service.save(created_division)
 
     async def get_division_by_id(self, division_id: int):
         async with AsyncSession(self.database_service.engine) as session:
