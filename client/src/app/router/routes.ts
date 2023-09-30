@@ -10,6 +10,8 @@ import PersonalPage from "@/pages/PersonalPage.vue";
 import LeaderBoardPage from "@/pages/LeaderBoardPage.vue";
 import CompaniesPage from "@/pages/CompaniesPage.vue";
 import FundsPage from "@/pages/FundsPage.vue";
+import SingleFundPage from "@/pages/SingleFundPage.vue";
+import SingleCompanyPage from "@/pages/SingleCompanyPage.vue";
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -64,11 +66,30 @@ export const routes: RouteRecordRaw[] = [
     component: CompaniesPage,
     meta: {
       layout: MainLayout
-    }
+    },
+    children: [
+      {
+        path: ':id',
+        component: SingleCompanyPage
+      }
+    ]
   },
   {
     path: '/funds',
     component: FundsPage,
+    meta: {
+      layout: MainLayout
+    },
+    children: [
+      {
+        path: ':id',
+        component: SingleCompanyPage
+      }
+    ]
+  },
+  {
+    path: '/myFund',
+    component: SingleFundPage,
     meta: {
       layout: MainLayout
     }
