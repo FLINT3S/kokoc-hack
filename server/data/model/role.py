@@ -13,22 +13,21 @@ class Role(SQLModel, table=True):
 
 
 class RoleEnum(Enum):
+    SUPERADMIN = "superadmin", 1,
+    USER = "user", 2,
+    COMPANYADMIN = "companyadmin", 3,
+    FUNDADMIN = "fundadmin", 4,
     def __new__(cls, *args, **kwds):
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
 
-    def __init__(self, _: str, id: int = 0):
+    def __init__(self, _: str, id : int = 0):
         self.id = id
 
     def __str__(self):
         return self.value
 
-    SUPERADMIN = 1
-    USER = 2
-    COMPANYADMIN = 3
-    FUNDADMIN = 4
-
-
-if __name__ == "__main__":
-    print(len(RoleEnum))
+    @classmethod
+    def list(cls):
+        return list(map(lambda c: c, cls))
