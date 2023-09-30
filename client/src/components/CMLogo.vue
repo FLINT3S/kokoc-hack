@@ -11,7 +11,7 @@
 import {userUserStore} from "@data/store/userStore.ts";
 
 withDefaults(defineProps<{
-  iconWidth: number
+  iconWidth?: number
 }>(), {
   iconWidth: 56
 })

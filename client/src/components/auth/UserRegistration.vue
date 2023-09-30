@@ -35,7 +35,8 @@
     </n-form-item>
 
     <n-form-item label="Компания" path="companyId">
-      <n-select v-model:value="userRegistrationData.companyId" :options="companies" label-field="title" value-field="id">
+      <n-select v-model:value="userRegistrationData.companyId" :options="companies" label-field="title"
+                value-field="id">
       </n-select>
     </n-form-item>
 
@@ -56,6 +57,9 @@ import {computed, onMounted, reactive, ref, watch} from 'vue'
 import {FormRules} from "naive-ui";
 import {VisibilityFilled, VisibilityOffFilled} from "@vicons/material"
 import {axiosInstance} from "@data/api/axiosInstance.ts";
+import {CurrentUser} from "@data/models/CurrentUser.ts";
+import {useRouter} from "vue-router";
+import {userUserStore} from "@data/store/userStore.ts";
 
 
 const userRegistrationData = reactive({
@@ -124,8 +128,27 @@ onMounted(() => {
   loadCompanies()
 })
 
+const router = useRouter();
+const regError = ref('');
+const isLoading = ref(false);
+
+const userStore = userUserStore();
+
 const onClickSubmitUserRegistration = () => {
   axiosInstance.post('/auth/user-registration', userRegistrationData)
+      .then((res: any) => {
+        axiosInstance.defaults.headers['Authorization'] = `Bearer ${res.data.accessToken}`
+        localStorage.setItem('userData', JSON.stringify({userId: res.data.user.id, token: res.data.accessToken}))
+        userStore.currentUser = new CurrentUser(res.data);
+        console.log(userStore.currentUser)
+        router.replace('/');
+      })
+      .catch((err: any) => {
+        regError.value = `Ошибка регистрации: ${err?.response?.data?.detail || 'неизвестная ошибка'}`
+      })
+      .finally(() => {
+        isLoading.value = false
+      })
 }
 </script>
 

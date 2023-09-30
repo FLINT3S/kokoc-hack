@@ -28,7 +28,7 @@ export const menuOptions: (MenuOption & { roles: string [] })[] = [
       ),
     key: '',
     icon: renderIcon(HomeFilled),
-    roles: ['superadmin', 'user', 'companyadmin', 'fundadmin']
+    roles: ['superadmin', 'employee', 'companyadmin', 'fundadmin']
   },
   {
     label: () =>
@@ -43,7 +43,7 @@ export const menuOptions: (MenuOption & { roles: string [] })[] = [
       ),
     key: 'mycompany',
     icon: renderIcon(CorporateFareOutlined),
-    roles: ['user', 'companyadmin']
+    roles: ['employee', 'companyadmin']
   },
   {
     label: () =>
@@ -73,7 +73,7 @@ export const menuOptions: (MenuOption & { roles: string [] })[] = [
       ),
     key: 'leaderboard',
     icon: renderIcon(FormatListNumberedFilled),
-    roles: ['user', 'companyadmin']
+    roles: ['employee', 'companyadmin']
   },
   {
     label: () =>

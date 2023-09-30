@@ -42,6 +42,8 @@ import {reactive, ref} from "vue";
 import {VisibilityFilled, VisibilityOffFilled} from "@vicons/material"
 import {axiosInstance} from "@data/api/axiosInstance.ts";
 import {useRouter} from "vue-router";
+import {userUserStore} from "@data/store/userStore.ts";
+import {CurrentUser} from "@data/models/CurrentUser.ts";
 
 const loginData = reactive({
   login: "",
@@ -51,15 +53,23 @@ const loginData = reactive({
 const router = useRouter();
 const loginError = ref('');
 const isLoading = ref(false);
+
+const userStore = userUserStore();
+
 const submitLogin = () => {
   isLoading.value = true
   axiosInstance.post('/auth/login', {login: loginData.login, password: loginData.password})
-      .then((res: any) => {
-        axiosInstance.defaults.headers['Authorization'] = `Bearer ${res.data.token}`
-        router.replace('/');
+      .then(async (res: any) => {
+        axiosInstance.defaults.headers['Authorization'] = `Bearer ${res.data.accessToken}`
+        localStorage.setItem('userData', JSON.stringify({userId: res.data.user.id, token: res.data.accessToken}))
+        if (await userStore.initUser()) {
+          await router.replace('/');
+        } else {
+          loginError.value = 'Ошибка логина'
+        }
       })
       .catch((err: any) => {
-        loginError.value = `Ошибка логина: ${err?.response?.data?.reason || 'неизвестная ошибка'}`
+        loginError.value = `Ошибка логина: ${err?.response?.data?.detail || 'неизвестная ошибка'}`
       })
       .finally(() => {
         isLoading.value = false
