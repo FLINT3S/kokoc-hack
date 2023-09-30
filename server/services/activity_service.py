@@ -16,7 +16,7 @@ class ActivityService:
     async def create_activity_request(self, employee_id: int, training_information: str,
                                       adding_kilocalories_count: int, file):
         content = await file.read()
-        file_name = PATH + "/code/public/" + f'{uuid.uuid4().hex}'
+        file_name = "/code/public/" + f'{uuid.uuid4().hex}'
         async with aiofiles.open(file_name, "wb") as f:
             await f.write(content)
 
