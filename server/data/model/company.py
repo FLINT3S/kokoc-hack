@@ -1,9 +1,6 @@
-from typing import Optional
+from typing import Optional, List
 
 from sqlmodel import SQLModel, Field, Relationship
-
-from data.model.employee import Employee
-from data.model.division import Division
 
 class Company(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

@@ -5,11 +5,13 @@ from fastapi import APIRouter, HTTPException
 from controllers.dto.check_token_dto import CheckTokenDTO
 from controllers.dto.login_data_dto import LoginDataDTO
 from controllers.dto.company_reg_dto import CompanyRegDTO
+from controllers.dto.employee_reg_dto import EmployeeRegDTO
 
 from data.database_service import DatabaseService
 from services.jwt_service import JWTService
 from services.user_service import UserService
 from services.company_service import CompanyService
+from services.employee_service import EmployeeService
 
 from data.model.role import RoleEnum
 
@@ -19,6 +21,7 @@ database_service = DatabaseService(
     f"postgresql+asyncpg://{os.environ['POSTGRES_USER']}:{os.environ['POSTGRES_PASSWORD']}@81.200.149.171:5432/{os.environ['POSTGRES_DB']}")
 user_service = UserService(database_service=database_service)
 company_service = CompanyService(database_service)
+employee_service = EmployeeService(database_service)
 
 jwt_service = JWTService()
 
@@ -47,7 +50,18 @@ async def company_registration(company_reg_dto: CompanyRegDTO):
         "company": company
     }
 
+@auth_router.post("/user-registration")
+async def company_registration(employee_reg_dto: EmployeeRegDTO):
+    user = await user_service.create_user(login=employee_reg_dto.login, plain_password=employee_reg_dto.password,
+                                          role_id=RoleEnum.USER.id)
+    employee = await employee_service.create_employee(user_id=user.id, name=employee_reg_dto.name, surname=employee_reg_dto.surname,
+                                                      company_id=employee_reg_dto.companyId, division_id=employee_reg_dto.divisionId)
 
+    return {
+        "accessToken": jwt_service.generate_jwt(user.id),
+        "user": user,
+        "employee": employee
+    }
 
 @auth_router.post("/check")
 async def check(token_data: CheckTokenDTO):
