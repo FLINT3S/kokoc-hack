@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import bcrypt
 from fastapi import HTTPException
 
@@ -12,9 +14,10 @@ class UserService:
     def __init__(self, database_service: DatabaseService):
         self.database_service = database_service
 
-    async def create_user(self, login: str, name: str, surname: str, plain_password: str, role_id: int):
+    async def create_user(self, login: str, plain_password: str, role_id: int):
         hashed_password = bcrypt.hashpw(str.encode(plain_password), bcrypt.gensalt())
-        created_user = User(login=login, password=hashed_password, name=name, surname=surname, role_id=role_id)
+        created_user = User(login=login, password=hashed_password, role_id=role_id,
+                            date=datetime.datetime.now())
 
         return await self.database_service.save(created_user)
 
@@ -40,7 +43,6 @@ class UserService:
 
     async def check_user_password(self, login: str, plain_password: str):
         user = await self.get_user_by_login(login)
-        print(user.login)
         if not user:
             raise HTTPException(401, "Неверный логин или пароль")
 

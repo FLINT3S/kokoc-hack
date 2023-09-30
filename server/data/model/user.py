@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from sqlmodel import SQLModel, Field, Relationship
@@ -16,3 +17,5 @@ class User(SQLModel, table=True):
     role: Optional["Role"] = Relationship(
         back_populates="users"
     )
+
+    date: datetime = Field(default=None, nullable=False)

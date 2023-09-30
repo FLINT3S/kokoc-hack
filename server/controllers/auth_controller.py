@@ -4,13 +4,21 @@ from fastapi import APIRouter, HTTPException
 
 from controllers.dto.check_token_dto import CheckTokenDTO
 from controllers.dto.login_data_dto import LoginDataDTO
+from controllers.dto.company_reg_dto import CompanyRegDTO
+
 from data.database_service import DatabaseService
 from services.jwt_service import JWTService
 from services.user_service import UserService
+from services.company_service import CompanyService
+
+from data.model.role import RoleEnum
+
 
 auth_router = APIRouter()
-user_service = UserService(database_service=DatabaseService(
-    f"postgresql+asyncpg://{os.environ['POSTGRES_USER']}:{os.environ['POSTGRES_PASSWORD']}@81.200.149.171:5432/{os.environ['POSTGRES_DB']}"))
+database_service = DatabaseService(
+    f"postgresql+asyncpg://{os.environ['POSTGRES_USER']}:{os.environ['POSTGRES_PASSWORD']}@81.200.149.171:5432/{os.environ['POSTGRES_DB']}")
+user_service = UserService(database_service=database_service)
+company_service = CompanyService(database_service)
 
 jwt_service = JWTService()
 
@@ -19,11 +27,25 @@ jwt_service = JWTService()
 async def login(login_data: LoginDataDTO):
     if await user_service.check_user_password(login_data.login, login_data.password):
         user = await user_service.get_user_by_login(login_data.login)
+        # TODO
         return {
             "accessToken": jwt_service.generate_jwt(user.id),
             "user": user
         }
     raise HTTPException(401, "Неверный логин или пароль")
+
+
+@auth_router.post("/company-registration")
+async def company_registration(company_reg_dto: CompanyRegDTO):
+    user = await user_service.create_user(login=company_reg_dto.login, plain_password=company_reg_dto.password,
+                                          role_id=RoleEnum.COMPANYADMIN.id)
+    company = await company_service.create_company(user_id=user.id, name=company_reg_dto.name)
+
+    return {
+        "accessToken": jwt_service.generate_jwt(user.id),
+        "user": user,
+        "company": company
+    }
 
 
 @auth_router.post("/check")
