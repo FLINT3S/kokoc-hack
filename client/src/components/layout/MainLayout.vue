@@ -79,11 +79,8 @@ import CMLogo from "@components/CMLogo.vue";
 import SideMenu from "@components/menu/SideMenu.vue";
 import {DarkModeFilled, LightModeFilled, LogOutFilled} from '@vicons/material'
 import {userUserStore} from "@data/store/userStore.ts";
-import {useRoute, useRouter} from "vue-router";
 
 const userStore = userUserStore()
-const route = useRoute()
-const router = useRouter()
 
 const isMenuCollapsed = ref(false);
 
@@ -91,12 +88,6 @@ const onClickLogout = () => {
   localStorage.clear()
   window.location.href = '/'
 }
-
-onBeforeMount(() => {
-  if (!userStore.currentUser && !route.path.includes('auth')) {
-      router.replace('/auth')
-    }
-})
 </script>
 
 <style>

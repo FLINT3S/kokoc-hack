@@ -6,12 +6,14 @@ export const userUserStore = defineStore('user', {
   state(): {
     currentUser: CurrentUser | null,
     token: string | null,
-    theme: 'light' | 'dark'
+    theme: 'light' | 'dark',
+    userInitLoading: boolean
   } {
     return {
       currentUser: null,
       token: null,
-      theme: 'light'
+      theme: 'light',
+      userInitLoading: true
     }
   },
   actions: {
@@ -23,6 +25,7 @@ export const userUserStore = defineStore('user', {
       localStorage.setItem('appTheme', this.theme)
     },
     async initUser() {
+      this.userInitLoading = true
       const data = JSON.parse(localStorage.getItem('userData') || 'null')
 
       if (!data?.userId) return false
@@ -31,8 +34,10 @@ export const userUserStore = defineStore('user', {
         const userData = (await axiosInstance.post(`/auth/check`, {accessToken: data.token})).data;
         axiosInstance.defaults.headers['Authorization'] = `Bearer ${data.token}`
         this.currentUser = new CurrentUser(userData)
+        this.userInitLoading = false
         return true
       } catch {
+        this.userInitLoading = false
         return false
       }
     }

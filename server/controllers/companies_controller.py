@@ -13,7 +13,7 @@ company_service = CompanyService(database_service)
 
 companies_router = APIRouter()
 
-@companies_router.get("/get-all-moderaion")
+@companies_router.get("/get-all-moderation")
 async def get_all_moderation():
     return await company_service.get_all_moderating_companies()
 
