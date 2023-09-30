@@ -1,5 +1,6 @@
 import {defineStore} from "pinia";
 import {CurrentUser} from "@data/models/CurrentUser.ts";
+import {axiosInstance} from "@data/api/axiosInstance.ts";
 
 export const userUserStore = defineStore('user', {
   state(): {
@@ -8,7 +9,7 @@ export const userUserStore = defineStore('user', {
     theme: 'light' | 'dark'
   } {
     return {
-      currentUser: new CurrentUser('superadmin'),
+      currentUser: null,
       token: null,
       theme: 'light'
     }
@@ -20,6 +21,20 @@ export const userUserStore = defineStore('user', {
     toggleTheme() {
       this.theme = this.theme === 'light' ? 'dark' : 'light'
       localStorage.setItem('appTheme', this.theme)
+    },
+    async initUser() {
+      const data = JSON.parse(localStorage.getItem('userData') || 'null')
+
+      if (!data?.userId) return false
+
+      try {
+        const userData = (await axiosInstance.post(`/auth/check`, {accessToken: data.token})).data;
+        axiosInstance.defaults.headers['Authorization'] = `Bearer ${data.token}`
+        this.currentUser = new CurrentUser(userData)
+        return true
+      } catch {
+        return false
+      }
     }
   }
 })

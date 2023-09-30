@@ -70,4 +70,27 @@ async def check(token_data: CheckTokenDTO):
     if not decoded or not decoded.get("user_id"):
         raise HTTPException(403, "Ошибка проверки токена")
 
-    return await user_service.get_user_by_id(int(decoded.get("user_id")))
+    user = await user_service.get_user_by_id(int(decoded.get("user_id")))
+    entity = await user_service.get_user_entity(int(decoded.get("user_id")))
+
+    if user and entity:
+        if user.role_id == 1:
+            return {
+                'user': user,
+                'superadmin': entity
+            }
+        elif user.role_id == 2:
+            return {
+                'user': user,
+                'employee': entity
+            }
+        elif user.role_id == 3:
+            return {
+                'user': user,
+                'company': entity
+            }
+        elif user.role_id == 4:
+            return {
+                'user': user,
+                'fund': entity
+            }

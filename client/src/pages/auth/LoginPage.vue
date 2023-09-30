@@ -28,7 +28,8 @@
         <span class="text-danger">{{ loginError }}</span>
       </n-collapse-transition>
 
-      <n-button :disabled="!(loginData.login && loginData.password)" :loading="isLoading" block size="large" type="primary"
+      <n-button :disabled="!(loginData.login && loginData.password)" :loading="isLoading" block size="large"
+                type="primary"
                 @click="submitLogin">
         Войти
       </n-button>
@@ -42,6 +43,7 @@ import {reactive, ref} from "vue";
 import {VisibilityFilled, VisibilityOffFilled} from "@vicons/material"
 import {axiosInstance} from "@data/api/axiosInstance.ts";
 import {useRouter} from "vue-router";
+import {userUserStore} from "@data/store/userStore.ts";
 
 const loginData = reactive({
   login: "",
@@ -51,15 +53,23 @@ const loginData = reactive({
 const router = useRouter();
 const loginError = ref('');
 const isLoading = ref(false);
+
+const userStore = userUserStore();
+
 const submitLogin = () => {
   isLoading.value = true
   axiosInstance.post('/auth/login', {login: loginData.login, password: loginData.password})
-      .then((res: any) => {
-        axiosInstance.defaults.headers['Authorization'] = `Bearer ${res.data.token}`
-        router.replace('/');
+      .then(async (res: any) => {
+        axiosInstance.defaults.headers['Authorization'] = `Bearer ${res.data.accessToken}`
+        localStorage.setItem('userData', JSON.stringify({userId: res.data.user.id, token: res.data.accessToken}))
+        if (await userStore.initUser()) {
+          await router.replace('/');
+        } else {
+          loginError.value = 'Ошибка логина'
+        }
       })
       .catch((err: any) => {
-        loginError.value = `Ошибка логина: ${err?.response?.data?.reason || 'неизвестная ошибка'}`
+        loginError.value = `Ошибка логина: ${err?.response?.data?.detail || 'неизвестная ошибка'}`
       })
       .finally(() => {
         isLoading.value = false

@@ -1,5 +1,5 @@
 import axios from 'axios'
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://kokoc.flint3s.ru/api/'
+  baseURL: import.meta.env.PROD ? 'https://kokoc.flint3s.ru/api/' : 'http://localhost:5000/api'
 })

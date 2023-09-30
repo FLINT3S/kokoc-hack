@@ -37,10 +37,13 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, reactive} from 'vue'
+import {computed, reactive, ref} from 'vue'
 import {FormRules} from "naive-ui";
 import {VisibilityFilled, VisibilityOffFilled} from "@vicons/material"
 import {axiosInstance} from "@data/api/axiosInstance.ts";
+import {CurrentUser} from "@data/models/CurrentUser.ts";
+import {useRouter} from "vue-router";
+import {userUserStore} from "@data/store/userStore.ts";
 
 
 const fundRegistrationData = reactive({
@@ -79,8 +82,28 @@ const userRegistrationRules: FormRules = {
   }],
 }
 
+const router = useRouter();
+const regError = ref('');
+const isLoading = ref(false);
+
+const userStore = userUserStore();
+
+
 const onClickSubmitCompanyRegistration = () => {
   axiosInstance.post('/auth/fund-registration', fundRegistrationData)
+      .then((res: any) => {
+        axiosInstance.defaults.headers['Authorization'] = `Bearer ${res.data.accessToken}`
+        localStorage.setItem('userData', JSON.stringify({userId: res.data.user.id, token: res.data.accessToken}))
+        userStore.currentUser = new CurrentUser(res.data);
+        console.log(userStore.currentUser)
+        router.replace('/');
+      })
+      .catch((err: any) => {
+        regError.value = `Ошибка регистрации: ${err?.response?.data?.detail || 'неизвестная ошибка'}`
+      })
+      .finally(() => {
+        isLoading.value = false
+      })
 }
 </script>
 

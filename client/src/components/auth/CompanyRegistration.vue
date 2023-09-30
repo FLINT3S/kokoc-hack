@@ -30,17 +30,25 @@
       </n-input>
     </n-form-item>
 
-    <n-button :disabled="isSubmitDisabled" block size="large" type="primary" @click="onClickSubmitCompanyRegistration">
+    <n-collapse-transition :show="!!regError" class="mb-3 text-center">
+      <span class="text-danger">{{ regError }}</span>
+    </n-collapse-transition>
+
+    <n-button :disabled="isSubmitDisabled" :loading="isLoading" block size="large" type="primary"
+              @click="onClickSubmitCompanyRegistration">
       Создать аккаунт
     </n-button>
   </n-form>
 </template>
 
 <script lang="ts" setup>
-import {computed, reactive} from 'vue'
+import {computed, reactive, ref} from 'vue'
 import {FormRules} from "naive-ui";
 import {VisibilityFilled, VisibilityOffFilled} from "@vicons/material"
 import {axiosInstance} from "@data/api/axiosInstance.ts";
+import {CurrentUser} from "@data/models/CurrentUser.ts";
+import {useRouter} from "vue-router";
+import {userUserStore} from "@data/store/userStore.ts";
 
 
 const companyRegistrationData = reactive({
@@ -79,8 +87,27 @@ const userRegistrationRules: FormRules = {
   }],
 }
 
+const router = useRouter();
+const regError = ref('');
+const isLoading = ref(false);
+
+const userStore = userUserStore();
+
 const onClickSubmitCompanyRegistration = () => {
   axiosInstance.post('/auth/company-registration', companyRegistrationData)
+      .then((res: any) => {
+        axiosInstance.defaults.headers['Authorization'] = `Bearer ${res.data.accessToken}`
+        localStorage.setItem('userData', JSON.stringify({userId: res.data.user.id, token: res.data.accessToken}))
+        userStore.currentUser = new CurrentUser(res.data);
+        console.log(userStore.currentUser)
+        router.replace('/');
+      })
+      .catch((err: any) => {
+        regError.value = `Ошибка регистрации: ${err?.response?.data?.detail || 'неизвестная ошибка'}`
+      })
+      .finally(() => {
+        isLoading.value = false
+      })
 }
 </script>
 
