@@ -1,11 +1,11 @@
 <template>
-  <div class="auth-page">
+  <n-layout class="auth-page">
     <n-card class="card-md">
       <CMLogo/>
 
       <router-view/>
     </n-card>
-  </div>
+  </n-layout>
 </template>
 
 <script lang="ts" setup>
@@ -14,7 +14,7 @@ import CMLogo from "@components/CMLogo.vue";
 
 <style scoped>
 .auth-page {
-  min-height: calc(100vh - 24px);
+  min-height: 100vh;
   padding: 12px;
   display: flex;
   justify-content: center;

@@ -7,7 +7,7 @@
     </p>
   </div>
 
-  <n-tabs type="segment">
+  <n-tabs type="segment" animated>
     <n-tab-pane name="oasis" tab="Пользователь">
       <UserRegistration/>
     </n-tab-pane>
