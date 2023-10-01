@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/app/debug/debug_panel.dart';
 import 'package:mobile/model/messages/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/dashboard_chart.dart';
 
@@ -15,6 +19,20 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String selectedChartView = 'Дни';
+  int numSavedActivities = 0;
+
+  @override
+  initState() {
+    super.initState();
+
+    SharedPreferences.getInstance().then((inst) {
+      Timer.periodic(const Duration(seconds: 2), (timer) {
+        setState(() {
+          numSavedActivities = inst.getStringList('savedActivities')?.length ?? 0;
+        });
+      });
+    });
+  }
 
   void onPressedAddActivity() {
     AutoRouter.of(context).pushNamed('/addActivity');
@@ -96,34 +114,97 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
+              (() {
+                if (numSavedActivities > 0) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32)),
+                      child: Column(
+                        children: [
+                          Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Column(children: [
+                                SizedBox(
+                                  width: double.maxFinite,
+                                  child: Text('$numSavedActivities записей ожидают синхронизации',
+                                      style: const TextStyle(fontSize: 18),
+                                      textAlign: TextAlign.start),
+                                ),
+                                const Text(
+                                    'Подключитесь к интернету чтобы все данные синхронизировались',
+                                    textAlign: TextAlign.start),
+                              ])),
+                          LinearProgressIndicator(
+                              color: Theme.of(context).primaryColor)
+                        ],
+                      ),
+                    ),
+                  );
+                }
+                return SizedBox();
+              }()),
+
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Card(
                   clipBehavior: Clip.antiAlias,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(32)),
-                  child: Column(
+                  child: const Column(
                     children: [
-                      const Padding(
+                      Padding(
                           padding: EdgeInsets.all(20),
                           child: Column(children: [
-                            SizedBox(
-                              width: double.maxFinite,
-                              child: Text('8 записей ожидают синхронизации',
-                                  style: TextStyle(fontSize: 18),
-                                  textAlign: TextAlign.start),
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 8.0),
+                              child: Text('Мои активности', textAlign: TextAlign.center, style: TextStyle(fontSize: 16),),
                             ),
-                            Text(
-                                'Подключитесь к интернету чтобы все данные синхронизировались',
-                                textAlign: TextAlign.start),
+                            Row(
+                              children: [
+                                Expanded(flex: 3, child: Text('Бег')),
+                                Expanded(flex: 1, child: Text('29.09'))
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(flex: 3, child: Text('Плавание')),
+                                Expanded(flex: 1, child: Text('28.09'))
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(flex: 3, child: Text('Бег')),
+                                Expanded(flex: 1, child: Text('28.09'))
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(flex: 3, child: Text('Силовая тренировка')),
+                                Expanded(flex: 1, child: Text('27.09'))
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(flex: 3, child: Text('Бег')),
+                                Expanded(flex: 1, child: Text('25.09'))
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(flex: 3, child: Text('Бег')),
+                                Expanded(flex: 1, child: Text('24.09'))
+                              ],
+                            )
                           ])),
-                      LinearProgressIndicator(
-                          color: Theme.of(context).primaryColor)
                     ],
                   ),
                 ),
               ),
-              const DebugPanel()
+
+              // const DebugPanel()
             ],
           ),
         )));
