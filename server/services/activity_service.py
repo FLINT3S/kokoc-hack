@@ -43,7 +43,7 @@ class ActivityService:
             file.file.close()
             im.close()
 
-        return "static" + file_only_name
+        return "static/" + file_only_name
 
     async def get_all_activity_requests_in_company(self, company_id: int):
         employee_service = EmployeeService(self.database_service)
