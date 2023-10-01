@@ -14,6 +14,7 @@ from controllers.employees_controller import employees_router
 from controllers.activities_controller import activities_route
 from fastapi.staticfiles import StaticFiles
 
+
 class APIService:
     def __init__(self, database: DatabaseService):
         self.debug = True
