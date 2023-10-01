@@ -16,6 +16,7 @@ class Employee(SQLModel, table=True):
     division: Optional["Division"] = Relationship(
         back_populates="employees"
     )
+    anonymous: bool = Field(default=False, nullable=False)
 
     activities: List["Activity"] = Relationship(back_populates="employee", sa_relationship_kwargs={'lazy': 'selectin'})
     activities_requests: List["ActivityRequest"] = Relationship(back_populates="employee", sa_relationship_kwargs={'lazy': 'selectin'})

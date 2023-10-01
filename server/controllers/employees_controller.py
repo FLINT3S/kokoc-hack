@@ -5,13 +5,14 @@ from fastapi import APIRouter
 
 from controllers.dto.get_employee_division_response_dto import GetEmployeeDivisionResponseDTO
 from data.database_service import DatabaseService
-from data.model.employee import Employee
 
 from services.employee_service import EmployeeService
 
 from controllers.dto.employee_moderate_dto import EmployeeModerateDTO
 
 from controllers.dto.employee_change_division import EmployeeChangeDivisionDTO
+
+from controllers.dto.change_employee_anonymous_dto import ChangeEmployeeAnonymousDTO
 
 employees_router = APIRouter()
 database_service = DatabaseService(
@@ -49,7 +50,13 @@ async def moderate(employee_change_division_dto: EmployeeChangeDivisionDTO):
     return await employee_service.change_division(employee_change_division_dto.employee_id,
                                                   employee_change_division_dto.division_id)
 
-@employees_router.get("/get_employees_in_company/{company_id}")
+
+@employees_router.get("/get-employees-in-company/{company_id}")
 async def get_employees_in_company(company_id: int):
     return await employee_service.get_employees_in_company(company_id)
 
+
+@employees_router.post("/change-employee-anonymous")
+async def change_employee_anonymous(change_employee_anonymous_dto: ChangeEmployeeAnonymousDTO):
+    return await employee_service.change_anonymous(employee_id=change_employee_anonymous_dto.employee_id,
+                                                   anonymous=change_employee_anonymous_dto.anonymous)

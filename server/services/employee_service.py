@@ -139,3 +139,18 @@ class EmployeeService:
                     employees.append(employee)
 
         return employees
+
+    async def change_anonymous(self, employee_id: int, anonymous: bool):
+        async with AsyncSession(self.database_service.engine) as session:
+            st = select(Employee) \
+                .where(Employee.id == employee_id) \
+                .limit(1)
+
+            employee = (await session.execute(st)).first()[0]
+            employee.anonymous = anonymous
+
+            session.add(employee)
+            await session.commit()
+            await session.refresh(employee)
+
+            return employee
