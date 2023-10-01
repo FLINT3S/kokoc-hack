@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobile/model/messages/constants.dart';
 import 'package:mobile/services/auth_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../services/api/result.dart';
 
@@ -107,6 +108,7 @@ class _AuthScreenState extends State<AuthScreen> {
               width: MediaQuery.of(context).size.width,
               child: Column(
                 children: [
+                  Image.asset('assets/icon.png'),
                   Text(
                     nameApp,
                     textAlign: TextAlign.center,
@@ -145,7 +147,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   filled: true)),
                         ),
                         Padding(
-                            padding: const EdgeInsets.only(top: 20),
+                            padding: const EdgeInsets.only(top: 20, bottom: 10),
                             child: SizedBox(
                               width: double.maxFinite,
                               child: FilledButton.icon(
@@ -163,7 +165,16 @@ class _AuthScreenState extends State<AuthScreen> {
                                           ),
                                         )
                                       : const Icon(Icons.login)),
-                            ))
+                            )),
+                        TextButton(
+                            onPressed: () async {
+                              final Uri url = Uri.parse(
+                                  'https://kokoc.flint3s.ru/#/auth/register');
+                              if (!await launchUrl(url)) {
+                                throw Exception('Could not launch $url');
+                              }
+                            },
+                            child: const Text('Регистрация'))
                       ],
                     ),
                   )

@@ -16,7 +16,7 @@ class AuthService {
 
     try {
       Response response = await GetIt.I<Dio>().post(
-          'http://kokoc.flint3s.ru/api/auth/login',
+          'https://kokoc.flint3s.ru/api/auth/login',
           data: jsonEncode({'login': login, 'password': password})
       );
 
@@ -32,7 +32,7 @@ class AuthService {
             'Bearer ${data.accessToken!}';
 
         Response employeeResponse = await GetIt.I<Dio>().post(
-            'http://kokoc.flint3s.ru/api/auth/check',
+            'https://kokoc.flint3s.ru/api/auth/check',
             data: jsonEncode({'accessToken': data.accessToken!})
         );
 
