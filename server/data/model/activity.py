@@ -9,6 +9,6 @@ class Activity(SQLModel, table=True):
     employee: Optional["Employee"] = Relationship(
         back_populates="activities"
     )
-    kilocalories_count: int
-    month_number: int
-    year_number: int
+    kilocalories_count: float = Field(default=None, nullable=False)
+    month_number: int = Field(default=None, nullable=False)
+    year_number: int = Field(default=None, nullable=False)

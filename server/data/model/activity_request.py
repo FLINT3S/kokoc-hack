@@ -10,6 +10,6 @@ class ActivityRequest(SQLModel, table=True):
         back_populates="activities_requests"
     )
     training_information: str = Field(default=None, nullable=False)
-    adding_kilocalories_count: int = Field(default=None, nullable=False)
+    adding_kilocalories_count: float = Field(default=None, nullable=False)
     date: datetime = Field(default=None, nullable=False)
     images: str = Field(default=None, nullable=False)
