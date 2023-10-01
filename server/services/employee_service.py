@@ -146,6 +146,9 @@ class EmployeeService:
 
         company = await company_service.get_company_by_id(company_id)
         employees = list()
+        if not company:
+            return []
+
         for division in company.divisions:
             for employee in division.employees:
                 user = await user_service.get_user_by_id(employee.user_id)
