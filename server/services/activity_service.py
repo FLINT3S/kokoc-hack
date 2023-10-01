@@ -24,7 +24,14 @@ class ActivityService:
         self.database_service = database_service
 
     async def create_activity_request(self, employee_id: int, training_information: str,
-                                      adding_kilocalories_count: int, file):
+                                      adding_kilocalories_count: int, images: str):
+        activity_request = ActivityRequest(employee_id=employee_id, training_information=training_information,
+                                           adding_kilocalories_count=adding_kilocalories_count,
+                                           date=datetime.datetime.now(), images=images)
+
+        return await self.database_service.save(activity_request)
+
+    async def save_training_imamge(self, file):
         file_name = "/code/public/" + f'{uuid.uuid4().hex}' + file.filename
         try:
             im = Image.open(file.file)
@@ -35,11 +42,7 @@ class ActivityService:
             file.file.close()
             im.close()
 
-        activity_request = ActivityRequest(employee_id=employee_id, training_information=training_information,
-                                           adding_kilocalories_count=adding_kilocalories_count,
-                                           date=datetime.datetime.now(), image_path=file_name)
-
-        return await self.database_service.save(activity_request)
+        return "static" + file_name
 
     async def get_all_activity_requests_in_company(self, company_id: int):
         employee_service = EmployeeService(self.database_service)

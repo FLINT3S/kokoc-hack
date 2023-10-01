@@ -12,4 +12,4 @@ class ActivityRequest(SQLModel, table=True):
     training_information: str = Field(default=None, nullable=False)
     adding_kilocalories_count: int = Field(default=None, nullable=False)
     date: datetime = Field(default=None, nullable=False)
-    image_path: str = Field(default=None, nullable=False)
+    images: str = Field(default=None, nullable=False)
