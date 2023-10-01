@@ -5,6 +5,7 @@ from sqlmodel import SQLModel, Field, Relationship
 from data.model.division import Division
 from data.model.activity import Activity
 from data.model.activity_request import ActivityRequest
+from data.model.step_activity import StepActivity
 
 
 class Employee(SQLModel, table=True):
@@ -19,4 +20,5 @@ class Employee(SQLModel, table=True):
     anonymous: bool = Field(default=False, nullable=False)
 
     activities: List["Activity"] = Relationship(back_populates="employee", sa_relationship_kwargs={'lazy': 'selectin'})
+    step_activities: List["StepActivity"] = Relationship(back_populates="employee", sa_relationship_kwargs={'lazy': 'selectin'})
     activities_requests: List["ActivityRequest"] = Relationship(back_populates="employee", sa_relationship_kwargs={'lazy': 'selectin'})

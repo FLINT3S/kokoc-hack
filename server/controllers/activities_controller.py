@@ -11,6 +11,8 @@ from controllers.dto.activity_request_creation_dto import ActivityRequestCreatio
 
 from controllers.dto.activity_by_date_and_employee_dto import ActivityByDateAndEmployeeDTO
 
+from controllers.dto.adding_count_stepd_dto import AddingCountStepsDTO
+
 database_service = DatabaseService(
     f"postgresql+asyncpg://{os.environ['POSTGRES_USER']}:{os.environ['POSTGRES_PASSWORD']}@81.200.149.171:5432/{os.environ['POSTGRES_DB']}")
 activity_service = ActivityService(database_service)
@@ -67,3 +69,9 @@ async def get_employees_descending_list_in_company(activity_info: ActivityByDate
     return await activity_service.get_activity_by_date(employee_id=activity_info.employee_id,
                                                        month=activity_info.month,
                                                        year=activity_info.year)
+
+
+@activities_route.post("/add_steps_count")
+async def get_employees_descending_list_in_company(activity_info: AddingCountStepsDTO):
+    return await activity_service.add_steps(employee_id=activity_info.employee_id,
+                                            count=activity_info.count, human_weight=activity_info.human_weight)
