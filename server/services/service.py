@@ -18,7 +18,7 @@ class APIService:
     def __init__(self, database: DatabaseService):
         self.debug = True
         self.app = FastAPI(title="API")
-        self.app.mount("/static", StaticFiles(directory="/code/public/"), name="static")
+        self.app.mount("/static", StaticFiles(directory="code/public"), name="static")
         self.database = database
 
         origins = ["*"]
