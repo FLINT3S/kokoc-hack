@@ -52,7 +52,9 @@
 <script lang="ts" setup>
 import {useUserStore} from "@data/store/userStore.ts";
 import {axiosInstance} from "@data/api/axiosInstance.ts";
-import {DataTableColumn} from "naive-ui";
+import {DataTableColumn, NButton} from "naive-ui";
+import {h} from "vue";
+import {router} from "@/app/router";
 
 const userStore = useUserStore()
 
@@ -110,6 +112,29 @@ const activitiesColumns: DataTableColumn[] = [
       return `${row.employee.name} ${row.employee.surname}`
     }
   },
+  {
+    title: 'Дата',
+    key: 'date',
+    render: (row, _) => {
+      return new Date(row.date).toLocaleDateString()
+    }
+  },
+  {
+    title: 'Открыть',
+    key: 'open',
+    render: (row, _) => {
+      return h(
+          NButton,
+          {
+            size: 'small',
+            onClick: () => {
+              router.push('/employees/' + row.employee_id)
+            }
+          },
+          {default: () => 'Профиль пользователя'}
+      )
+    }
+  }
 ]
 
 loadActivitiesInCompany()

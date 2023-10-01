@@ -49,6 +49,7 @@ declare module 'vue' {
     NSpin: typeof import('naive-ui')['NSpin']
     NTabPane: typeof import('naive-ui')['NTabPane']
     NTabs: typeof import('naive-ui')['NTabs']
+    NThemeEditor: typeof import('naive-ui')['NThemeEditor']
     RedeemFilled: typeof import('./src/components/icons/RedeemFilled.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
