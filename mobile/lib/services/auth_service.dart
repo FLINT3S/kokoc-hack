@@ -16,7 +16,7 @@ class AuthService {
 
     try {
       Response response = await GetIt.I<Dio>().post(
-          'http://10.0.2.2:5000/api/auth/login',
+          'http://kokoc.flint3s.ru/api/auth/login',
           data: jsonEncode({'login': login, 'password': password})
       );
 
@@ -30,6 +30,21 @@ class AuthService {
 
         GetIt.I<Dio>().options.headers['Authorization'] =
             'Bearer ${data.accessToken!}';
+
+        Response employeeResponse = await GetIt.I<Dio>().post(
+            'http://kokoc.flint3s.ru/api/auth/check',
+            data: jsonEncode({'accessToken': data.accessToken!})
+        );
+
+        if (employeeResponse.data?['employee'] != null) {
+          sp.setInt('employeeId', employeeResponse.data?['employee']['id']!);
+        } else {
+          sp.setBool('isSignedIn', false);
+          sp.remove('authToken');
+
+          log('Error while obtaining token');
+          return Result.error('Ошибка аутентификации: пользователь не является сотрудником. Используйте веб-версию');
+        }
 
         log('Token obtained');
         return Result.success(data.accessToken!);
@@ -75,7 +90,6 @@ class AuthService {
 
     try {
       Response response = await GetIt.I<Dio>()
-          // .get('https://run.mocky.io/v3/fbf3553a-ada9-4074-9b9f-137db17efedf'); //403
           .get(
               'https://run.mocky.io/v3/fd01630d-b433-4ee1-af1c-45822a101dba'); //202
 
