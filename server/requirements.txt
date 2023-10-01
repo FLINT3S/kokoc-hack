@@ -10,3 +10,4 @@ pyjwt
 python-multipart
 aiofiles
 PIL
+aiohttp
