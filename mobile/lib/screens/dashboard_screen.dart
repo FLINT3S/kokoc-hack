@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'dart:developer';
+import 'dart:convert';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/app/debug/debug_panel.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobile/model/messages/constants.dart';
 import 'package:mobile/widgets/google_fit_sync.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,6 +22,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String selectedChartView = 'Дни';
   int numSavedActivities = 0;
+  dynamic currentCompany;
+  dynamic currentActivity;
 
   @override
   initState() {
@@ -29,14 +32,49 @@ class _HomeScreenState extends State<HomeScreen> {
     SharedPreferences.getInstance().then((inst) {
       Timer.periodic(const Duration(seconds: 2), (timer) {
         setState(() {
-          numSavedActivities = inst.getStringList('savedActivities')?.length ?? 0;
+          numSavedActivities =
+              inst.getStringList('savedActivities')?.length ?? 0;
         });
       });
     });
+
+    loadAll();
   }
 
   void onPressedAddActivity() {
     AutoRouter.of(context).pushNamed('/addActivity');
+  }
+
+  Future loadCompany() async {
+    var sp = await SharedPreferences.getInstance();
+
+    var response = await GetIt.I<Dio>().get(
+        'https://kokoc.flint3s.ru/api/companies/get/${sp.getInt('userCompanyId')!}');
+
+    setState(() {
+      currentCompany = response.data;
+    });
+  }
+
+  Future loadCurrentMonthStats() async {
+    var sp = await SharedPreferences.getInstance();
+    final now = DateTime.now();
+
+    var response = await GetIt.I<Dio>().post(
+        'https://kokoc.flint3s.ru/api/activities/get-by-date-and-employee',
+        data: jsonEncode({
+          'employee_id': sp.getInt('employeeId')!,
+          'month': now.month,
+          'year': now.year,
+        }));
+    setState(() {
+      currentActivity = response.data;
+    });
+  }
+
+  loadAll() async {
+    await loadCompany();
+    await loadCurrentMonthStats();
   }
 
   @override
@@ -56,26 +94,29 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Padding(
-                  padding: EdgeInsets.only(bottom: 32),
+              Padding(
+                  padding: const EdgeInsets.only(bottom: 32),
                   child: Column(children: [
-                    Text('1254 ₽',
-                        style: TextStyle(fontSize: 48, height: 1),
+                    Text(
+                        '${double.parse(currentActivity?['kilocalories_count']?.toString() ?? '0') * double.parse(currentCompany?['cost_of_unit']?.toString() ?? '0')} ₽',
+                        style: const TextStyle(fontSize: 48, height: 1),
                         textAlign: TextAlign.center),
-                    Text('уже конвертировано в пожертвования',
+                    const Text('уже конвертировано в пожертвования',
                         textAlign: TextAlign.center),
                   ])),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 32),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 32),
                 child: Row(
                   children: [
                     Expanded(
                         flex: 1,
                         child: Column(children: [
-                          Text('12540', style: TextStyle(fontSize: 26)),
-                          Text('ккал потрачено всего')
+                          Text(
+                              '${double.parse(currentActivity?['kilocalories_count']?.toString() ?? '0')}',
+                              style: const TextStyle(fontSize: 26)),
+                          const Text('ккал потрачено всего')
                         ])),
-                    Expanded(
+                    const Expanded(
                         flex: 1,
                         child: Column(children: [
                           Text('35', style: TextStyle(fontSize: 26)),
@@ -130,7 +171,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Column(children: [
                                 SizedBox(
                                   width: double.maxFinite,
-                                  child: Text('$numSavedActivities записей ожидают синхронизации',
+                                  child: Text(
+                                      '$numSavedActivities записей ожидают синхронизации',
                                       style: const TextStyle(fontSize: 18),
                                       textAlign: TextAlign.start),
                                 ),
@@ -145,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 }
-                return SizedBox();
+                return const SizedBox();
               }()),
 
               const GoogleFitSync(),
@@ -163,7 +205,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Column(children: [
                             Padding(
                               padding: EdgeInsets.only(bottom: 8.0),
-                              child: Text('Мои активности', textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
+                              child: Text('Мои активности',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 16)),
                             ),
                             Row(
                               children: [
@@ -185,7 +229,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Row(
                               children: [
-                                Expanded(flex: 3, child: Text('Силовая тренировка')),
+                                Expanded(
+                                    flex: 3, child: Text('Силовая тренировка')),
                                 Expanded(flex: 1, child: Text('27.09'))
                               ],
                             ),
@@ -206,7 +251,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-
 
               // const DebugPanel()
             ],

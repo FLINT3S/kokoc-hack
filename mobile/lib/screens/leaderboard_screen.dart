@@ -14,8 +14,20 @@ class LeaderBoardScreen extends StatefulWidget {
 
 class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   List<dynamic> leaderBoardUsers = [];
+  dynamic currentCompany;
 
-  void loadLeaderboard() async {
+  Future loadCompany() async {
+    var sp = await SharedPreferences.getInstance();
+
+    var response = await GetIt.I<Dio>().get(
+        'https://kokoc.flint3s.ru/api/companies/get/${sp.getInt('userCompanyId')!}');
+
+    setState(() {
+      currentCompany = response.data;
+    });
+  }
+
+  Future loadLeaderboard() async {
     var sp = await SharedPreferences.getInstance();
 
     var response = await GetIt.I<Dio>().get(
@@ -26,23 +38,28 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
     });
   }
 
+  void loadAll() async {
+    await loadCompany();
+    await loadLeaderboard();
+  }
+
   @override
   void initState() {
     super.initState();
-    loadLeaderboard();
+    loadAll();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Лидерборд'),
+        title: const Text('Лидерборд'),
         actions: [
-          IconButton(onPressed: loadLeaderboard, icon: const Icon(Icons.refresh))
+          IconButton(onPressed: loadAll, icon: const Icon(Icons.refresh))
         ],
       ),
       body: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           children: leaderBoardUsers.asMap().entries.map((e) {
             dynamic user = e.value;
             int index = e.key;
@@ -51,7 +68,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
               title: Text(
                   '${user['employee']['name']} ${user['employee']['surname']}'),
               leading: CircleAvatar(child: Text('${index + 1}')),
-              trailing: Text('${user['kilocalories_count']} ₽'),
+              trailing: Text('${double.parse(user['kilocalories_count'].toString()) * double.parse(currentCompany['cost_of_unit'].toString())} ₽'),
             );
           }).toList()),
     );
