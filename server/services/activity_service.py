@@ -116,3 +116,67 @@ class ActivityService:
             await session.commit()
 
         return {}
+
+    async def get_employees_descending_list_in_company(self, company_id: int):
+        async with AsyncSession(self.database_service.engine) as session:
+
+            date = datetime.datetime.now()
+            year = date.year
+            month = date.month
+
+            employee_service = EmployeeService(self.database_service)
+            employees = await employee_service.get_employees_in_company(company_id)
+            employees_result = list()
+            for employee in employees:
+                st = select(Activity) \
+                    .where(Activity.employee_id == employee.id) \
+                    .where(Activity.year_number == year) \
+                    .where(Activity.month_number == month) \
+                    .limit(1)
+                result = (await session.execute(st)).first()
+                activity = None
+                if result is not None:
+                    activity = result[0]
+                else:
+                    activity = Activity(employee_id=employee.id, kilocalories_count=0, year_number=year,
+                                        month_number=month)
+                employees_result.append({
+                    "kilocalories_count": activity.kilocalories_count,
+                    "employee": employee
+                })
+
+            employees_result.sort(key=lambda x: x.get("kilocalories_count"), reverse=True)
+
+            return employees_result
+
+    async def get_employees_descending_list(self):
+        async with AsyncSession(self.database_service.engine) as session:
+
+            date = datetime.datetime.now()
+            year = date.year
+            month = date.month
+
+            employee_service = EmployeeService(self.database_service)
+            employees = await employee_service.get_all_base_models_approved_employees()
+            employees_result = list()
+            for employee in employees:
+                st = select(Activity) \
+                    .where(Activity.employee_id == employee.id) \
+                    .where(Activity.year_number == year) \
+                    .where(Activity.month_number == month) \
+                    .limit(1)
+                result = (await session.execute(st)).first()
+                activity = None
+                if result is not None:
+                    activity = result[0]
+                else:
+                    activity = Activity(employee_id=employee.id, kilocalories_count=0, year_number=year,
+                                        month_number=month)
+                employees_result.append({
+                    "kilocalories_count": activity.kilocalories_count,
+                    "employee": employee
+                })
+
+            employees_result.sort(key=lambda x: x.get("kilocalories_count"), reverse=True)
+
+            return employees_result
