@@ -49,7 +49,7 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
   }
 
   int addActivityStep = 0;
-  String? activityType = 'Плавание';
+  String? activityType;
 
   TextEditingController durationController = TextEditingController();
   String? runIntensity;
