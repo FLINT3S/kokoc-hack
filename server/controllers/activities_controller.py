@@ -9,6 +9,8 @@ from controllers.dto.activity_request_moderate_dto import ActivityRequestModerat
 
 from controllers.dto.activity_request_creation_dto import ActivityRequestCreationDTO
 
+from controllers.dto.activity_by_date_and_employee_dto import ActivityByDateAndEmployeeDTO
+
 database_service = DatabaseService(
     f"postgresql+asyncpg://{os.environ['POSTGRES_USER']}:{os.environ['POSTGRES_PASSWORD']}@81.200.149.171:5432/{os.environ['POSTGRES_DB']}")
 activity_service = ActivityService(database_service)
@@ -59,3 +61,9 @@ async def get_all_moderation(company_id: int):
 async def get_employees_descending_list_in_company():
     return await activity_service.get_employees_descending_list()
 
+
+@activities_route.post("/get-by-date-and-employee")
+async def get_employees_descending_list_in_company(activity_info: ActivityByDateAndEmployeeDTO):
+    return await activity_service.get_activity_by_date(employee_id=activity_info.employee_id,
+                                                       month=activity_info.month,
+                                                       year=activity_info.year)
