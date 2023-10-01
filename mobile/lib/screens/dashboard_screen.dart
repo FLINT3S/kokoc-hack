@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/app/debug/debug_panel.dart';
 import 'package:mobile/model/messages/constants.dart';
+import 'package:mobile/widgets/google_fit_sync.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/dashboard_chart.dart';
@@ -147,6 +148,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 return SizedBox();
               }()),
 
+              const GoogleFitSync(),
+
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Card(
@@ -203,6 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
+
 
               // const DebugPanel()
             ],
