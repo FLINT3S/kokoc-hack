@@ -5,6 +5,8 @@ from fastapi import APIRouter, UploadFile, File, Form
 from data.database_service import DatabaseService
 from services.activity_service import ActivityService
 
+from controllers.dto.activity_request_moderate_dto import ActivityRequestModerateDTO
+
 database_service = DatabaseService(
     f"postgresql+asyncpg://{os.environ['POSTGRES_USER']}:{os.environ['POSTGRES_PASSWORD']}@81.200.149.171:5432/{os.environ['POSTGRES_DB']}")
 activity_service = ActivityService(database_service)
@@ -35,3 +37,9 @@ async def get_all_moderation(activity_request_id: int):
 @activities_route.get("/get_activity_request_image_by_id/{activity_request_id}")
 async def get_all_moderation(activity_request_id: int):
     return await activity_service.get_image_from_activity_request(activity_request_id)
+
+
+@activities_route.post("/moderate")
+async def moderate(activity_request_moderate_dto: ActivityRequestModerateDTO):
+    return await activity_service.moderate_activity_request(activity_request_moderate_dto.activity_request_id,
+                                                            activity_request_moderate_dto.status)
