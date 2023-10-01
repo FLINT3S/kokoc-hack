@@ -2,6 +2,7 @@ import datetime
 
 import bcrypt
 from fastapi import HTTPException
+from sqlalchemy.orm import selectinload
 
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -63,7 +64,7 @@ class UserService:
                     return (await session.execute(st)).first()[0]
 
                 elif result.role_id == 2:
-                    st = select(Employee) \
+                    st = select(Employee).options(selectinload(Employee.division)) \
                         .where(Employee.user_id == user_id)
                     return (await session.execute(st)).first()[0]
 

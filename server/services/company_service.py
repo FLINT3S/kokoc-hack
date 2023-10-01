@@ -1,3 +1,5 @@
+from sqlalchemy.orm import selectinload
+
 from data.database_service import DatabaseService
 from data.model.company import Company
 from data.model.division import Division
@@ -115,7 +117,7 @@ class CompanyService:
 
     async def get_company_by_id(self, company_id: int):
         async with AsyncSession(self.database_service.engine) as session:
-            st = select(Company) \
+            st = select(Company).options(selectinload(Company.divisions)) \
                 .where(Company.id == company_id) \
                 .limit(1)
             result = (await session.execute(st)).first()

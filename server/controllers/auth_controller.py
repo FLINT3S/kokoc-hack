@@ -3,23 +3,18 @@ import os
 from fastapi import APIRouter, HTTPException
 
 from controllers.dto.check_token_dto import CheckTokenDTO
-from controllers.dto.login_data_dto import LoginDataDTO
 from controllers.dto.company_reg_dto import CompanyRegDTO
 from controllers.dto.employee_reg_dto import EmployeeRegDTO
-
+from controllers.dto.fund_reg_dto import FundRegDTO
+from controllers.dto.login_data_dto import LoginDataDTO
 from data.database_service import DatabaseService
-from services.jwt_service import JWTService
-from services.user_service import UserService
+from data.model.role import RoleEnum
+from data.model.user_status import UserStatusEnum
 from services.company_service import CompanyService
 from services.employee_service import EmployeeService
-
-from data.model.role import RoleEnum
-
-from data.model.user_status import UserStatusEnum
-
 from services.fund_service import FundService
-
-from controllers.dto.fund_reg_dto import FundRegDTO
+from services.jwt_service import JWTService
+from services.user_service import UserService
 
 auth_router = APIRouter()
 database_service = DatabaseService(
@@ -61,6 +56,7 @@ async def company_registration(company_reg_dto: CompanyRegDTO):
         "company": company
     }
 
+
 @auth_router.post("/user-registration")
 async def user_registration(employee_reg_dto: EmployeeRegDTO):
     user = await user_service.get_user_by_login(employee_reg_dto.login)
@@ -70,7 +66,8 @@ async def user_registration(employee_reg_dto: EmployeeRegDTO):
 
     user = await user_service.create_user(login=employee_reg_dto.login, plain_password=employee_reg_dto.password,
                                           role_id=RoleEnum.USER.id)
-    employee = await employee_service.create_employee(user_id=user.id, name=employee_reg_dto.title, surname=employee_reg_dto.surname,
+    employee = await employee_service.create_employee(user_id=user.id, name=employee_reg_dto.title,
+                                                      surname=employee_reg_dto.surname,
                                                       division_id=employee_reg_dto.divisionId)
 
     return {
@@ -78,6 +75,7 @@ async def user_registration(employee_reg_dto: EmployeeRegDTO):
         "user": user,
         "employee": employee
     }
+
 
 @auth_router.post("/fund-registration")
 async def fund_registration(fund_reg_dto: FundRegDTO):
@@ -95,6 +93,7 @@ async def fund_registration(fund_reg_dto: FundRegDTO):
         "user": user,
         "fundadmin": fund
     }
+
 
 @auth_router.post("/check")
 async def check(token_data: CheckTokenDTO):
@@ -119,7 +118,15 @@ async def check(token_data: CheckTokenDTO):
         elif user.role_id == 2:
             return {
                 'user': user,
-                'employee': entity
+                'employee': {
+                    'id': entity.id,
+                    'surname': entity.surname,
+                    'anonymous': entity.anonymous,
+                    'user_id': entity.user_id,
+                    'name': entity.name,
+                    'division_id': entity.division_id,
+                    'company_id': entity.division.company_id
+                }
             }
         elif user.role_id == 3:
             return {
