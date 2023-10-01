@@ -7,10 +7,12 @@ from aiohttp.web_fileresponse import FileResponse
 from data.database_service import DatabaseService
 
 from data.model.activity_request import ActivityRequest
+from fastapi import HTTPException
 
 from services.employee_service import EmployeeService
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
+from PIL import Image
 
 PATH = os.path.join(os.getcwd())
 
@@ -21,10 +23,17 @@ class ActivityService:
 
     async def create_activity_request(self, employee_id: int, training_information: str,
                                       adding_kilocalories_count: int, file):
-        content = await file.read()
-        file_name = "/code/public/" + f'{uuid.uuid4().hex}'
-        async with aiofiles.open(file_name, "wb") as f:
-            await f.write(content)
+        filename = "/code/public/" + f'{uuid.uuid4().hex}' + '.jpg'
+        try:
+            im = Image.open(file.file)
+            if im.mode in ("RGBA", "P"):
+                im = im.convert("RGB")
+            im.save(filename, 'JPEG', quality=50)
+        except Exception:
+            raise HTTPException(status_code=500, detail='Что-то пошло не так')
+        finally:
+            file.file.close()
+            im.close()
 
         activity_request = ActivityRequest(employee_id=employee_id, training_information=training_information,
                                            adding_kilocalories_count=adding_kilocalories_count,

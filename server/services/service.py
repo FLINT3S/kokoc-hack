@@ -12,12 +12,13 @@ from controllers.divisions_controller import division_router
 from controllers.employees_controller import employees_router
 
 from controllers.activities_controller import activities_route
-
+from fastapi.staticfiles import StaticFiles
 
 class APIService:
     def __init__(self, database: DatabaseService):
         self.debug = True
         self.app = FastAPI(title="API")
+        self.app.mount("/static", StaticFiles(directory="/code/public/"), name="static")
         self.database = database
 
         origins = ["*"]
