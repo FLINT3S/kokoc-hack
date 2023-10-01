@@ -9,5 +9,5 @@ bcrypt
 pyjwt
 python-multipart
 aiofiles
-PIL
 aiohttp
+Pillow
