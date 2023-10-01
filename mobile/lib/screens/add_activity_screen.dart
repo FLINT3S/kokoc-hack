@@ -39,7 +39,7 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
   Future pickImage() async {
     try {
       final receivedImages =
-      await ImagePicker().pickMultiImage(requestFullMetadata: true);
+          await ImagePicker().pickMultiImage(requestFullMetadata: true);
       if (receivedImages.isEmpty) return;
       final imagesTemp = receivedImages.map((i) => File(i.path)).toList();
       setState(() => images = imagesTemp);
@@ -48,11 +48,12 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
     }
   }
 
-  int addActivityStep = 1;
-  String? activityType = 'Бег';
+  int addActivityStep = 0;
+  String? activityType = 'Плавание';
 
-  TextEditingController runDurationController = TextEditingController();
+  TextEditingController durationController = TextEditingController();
   String? runIntensity;
+  String? swimStyle;
 
   void goToNextStep() {
     if (addActivityStep == 0) {
@@ -91,8 +92,8 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
 
     if (activityType == 'Бег') {
       if (runIntensity == null ||
-          runDurationController.value.text == '' ||
-          int.tryParse(runDurationController.value.text)! <= 0) {
+          durationController.value.text == '' ||
+          int.tryParse(durationController.value.text)! <= 0) {
         showSnackBar('Заполните все поля тренировки!');
       } else {
         int met;
@@ -107,14 +108,44 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
             met = 10;
         }
         double durationHours =
-            (int.tryParse(runDurationController.value.text)! / 60);
+            (int.tryParse(durationController.value.text)! / 60);
         double burnedEnergy = durationHours * met * weight;
 
         saveActivityToSP({
           'type': 'run',
           'burnedEnergy': burnedEnergy,
-          'runDuration': int.tryParse(runDurationController.value.text),
+          'duration': int.tryParse(durationController.value.text),
           'runIntensity': runIntensity,
+          'images': images.map((i) => i.path).toList()
+        });
+
+        AutoRouter.of(context).navigateNamed('/');
+      }
+    } else if (activityType == 'Плавание') {
+      if (swimStyle == null ||
+          durationController.value.text == '' ||
+          int.tryParse(durationController.value.text)! <= 0) {
+        showSnackBar('Заполните все поля тренировки!');
+      } else {
+        int met;
+        switch (runIntensity) {
+          case 'Брасс':
+            met = 7;
+          case 'Кроль':
+            met = 10;
+          case 'Баттерфляй':
+            met = 14;
+          default:
+            met = 10;
+        }
+        double durationHours =(int.tryParse(durationController.value.text)! / 60);
+        double burnedEnergy = durationHours * met * weight;
+
+        saveActivityToSP({
+          'type': 'swim',
+          'burnedEnergy': burnedEnergy,
+          'duration': int.tryParse(durationController.value.text),
+          'swimStyle': swimStyle,
           'images': images.map((i) => i.path).toList()
         });
 
@@ -216,7 +247,301 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
                           ),
                           TextField(
                             keyboardType: TextInputType.number,
-                            controller: runDurationController,
+                            controller: durationController,
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto,
+                                labelText: 'Продолжительность (в минутах)',
+                                filled: true),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 32.0),
+                            child: Text('Интенсивность бега'),
+                          ),
+                          ListTile(
+                              title: const Text('Умеренная (6-8 км/ч)'),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 0),
+                              leading: Radio<String>(
+                                value: 'Умеренная (6-8 км/ч)',
+                                groupValue: runIntensity,
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    runIntensity = value;
+                                  });
+                                },
+                              )),
+                          ListTile(
+                              title: const Text('Выше среднего (9-13 км/ч)'),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 0),
+                              leading: Radio<String>(
+                                value: 'Выше среднего (9-13 км/ч)',
+                                groupValue: runIntensity,
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    runIntensity = value;
+                                  });
+                                },
+                              )),
+                          ListTile(
+                              title: const Text('Высокая (более 13 км/ч)'),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 0),
+                              leading: Radio<String>(
+                                value: 'Высокая (более 13 км/ч)',
+                                groupValue: runIntensity,
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    runIntensity = value;
+                                  });
+                                },
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: TextButton(
+                                onPressed: pickImage,
+                                child: const Text('Выбрать фото')),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 12.0),
+                            child: SizedBox(
+                              height: 150,
+                              child: Expanded(
+                                child: ListView(
+                                  // This next line does the trick.
+                                  scrollDirection: Axis.horizontal,
+                                  children: images.map((file) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        child: AspectRatio(
+                                            aspectRatio: 1,
+                                            child: Image.file(
+                                              file,
+                                              fit: BoxFit.cover,
+                                            )),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ]);
+                  }
+                  if (activityType == 'Плавание') {
+                    return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 24),
+                            child: Text('Данные активности',
+                                style: TextStyle(fontSize: 24)),
+                          ),
+                          TextField(
+                            keyboardType: TextInputType.number,
+                            controller: durationController,
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto,
+                                labelText: 'Продолжительность (в минутах)',
+                                filled: true),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 32.0),
+                            child: Text('Стиль плавания'),
+                          ),
+                          ListTile(
+                              title: const Text('Брасс'),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 0),
+                              leading: Radio<String>(
+                                value: 'Брасс',
+                                groupValue: swimStyle,
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    swimStyle = value;
+                                  });
+                                },
+                              )),
+                          ListTile(
+                              title: const Text('Кроль'),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 0),
+                              leading: Radio<String>(
+                                value: 'Кроль',
+                                groupValue: swimStyle,
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    swimStyle = value;
+                                  });
+                                },
+                              )),
+                          ListTile(
+                              title: const Text('Баттерфляй'),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 0),
+                              leading: Radio<String>(
+                                value: 'Баттерфляй',
+                                groupValue: swimStyle,
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    swimStyle = value;
+                                  });
+                                },
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: TextButton(
+                                onPressed: pickImage,
+                                child: const Text('Выбрать фото')),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 12.0),
+                            child: SizedBox(
+                              height: 150,
+                              child: Expanded(
+                                child: ListView(
+                                  // This next line does the trick.
+                                  scrollDirection: Axis.horizontal,
+                                  children: images.map((file) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        child: AspectRatio(
+                                            aspectRatio: 1,
+                                            child: Image.file(
+                                              file,
+                                              fit: BoxFit.cover,
+                                            )),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ]);
+                  }
+                  if (activityType == 'Силовые упражнения') {
+                    return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 24),
+                            child: Text('Данные активности',
+                                style: TextStyle(fontSize: 24)),
+                          ),
+                          TextField(
+                            keyboardType: TextInputType.number,
+                            controller: durationController,
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.auto,
+                                labelText: 'Продолжительность (в минутах)',
+                                filled: true),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 32.0),
+                            child: Text('Интенсивность бега'),
+                          ),
+                          ListTile(
+                              title: const Text('Умеренная (6-8 км/ч)'),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 0),
+                              leading: Radio<String>(
+                                value: 'Умеренная (6-8 км/ч)',
+                                groupValue: runIntensity,
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    runIntensity = value;
+                                  });
+                                },
+                              )),
+                          ListTile(
+                              title: const Text('Выше среднего (9-13 км/ч)'),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 0),
+                              leading: Radio<String>(
+                                value: 'Выше среднего (9-13 км/ч)',
+                                groupValue: runIntensity,
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    runIntensity = value;
+                                  });
+                                },
+                              )),
+                          ListTile(
+                              title: const Text('Высокая (более 13 км/ч)'),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 0),
+                              leading: Radio<String>(
+                                value: 'Высокая (более 13 км/ч)',
+                                groupValue: runIntensity,
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    runIntensity = value;
+                                  });
+                                },
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: TextButton(
+                                onPressed: pickImage,
+                                child: const Text('Выбрать фото')),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 12.0),
+                            child: SizedBox(
+                              height: 150,
+                              child: Expanded(
+                                child: ListView(
+                                  // This next line does the trick.
+                                  scrollDirection: Axis.horizontal,
+                                  children: images.map((file) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        child: AspectRatio(
+                                            aspectRatio: 1,
+                                            child: Image.file(
+                                              file,
+                                              fit: BoxFit.cover,
+                                            )),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ]);
+                  }
+                  if (activityType == 'Велосипед') {
+                    return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 24),
+                            child: Text('Данные активности',
+                                style: TextStyle(fontSize: 24)),
+                          ),
+                          TextField(
+                            keyboardType: TextInputType.number,
+                            controller: durationController,
                             decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 floatingLabelBehavior:
