@@ -8,7 +8,7 @@
 
 .card-md {
     max-width: 768px;
-    margin: 12px;
+    margin: 0 auto 0 auto;
 }
 
 @media screen and (min-width: 992px) {

@@ -375,27 +375,25 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
                             padding: const EdgeInsets.only(top: 12.0),
                             child: SizedBox(
                               height: 150,
-                              child: Expanded(
-                                child: ListView(
-                                  // This next line does the trick.
-                                  scrollDirection: Axis.horizontal,
-                                  children: images.map((file) {
-                                    return Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 8.0),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        child: AspectRatio(
-                                            aspectRatio: 1,
-                                            child: Image.file(
-                                              file,
-                                              fit: BoxFit.cover,
-                                            )),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
+                              child: ListView(
+                                // This next line does the trick.
+                                scrollDirection: Axis.horizontal,
+                                children: images.map((file) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.only(right: 8.0),
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(8.0),
+                                      child: AspectRatio(
+                                          aspectRatio: 1,
+                                          child: Image.file(
+                                            file,
+                                            fit: BoxFit.cover,
+                                          )),
+                                    ),
+                                  );
+                                }).toList(),
                               ),
                             ),
                           ),
@@ -473,27 +471,25 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
                             padding: const EdgeInsets.only(top: 12.0),
                             child: SizedBox(
                               height: 150,
-                              child: Expanded(
-                                child: ListView(
-                                  // This next line does the trick.
-                                  scrollDirection: Axis.horizontal,
-                                  children: images.map((file) {
-                                    return Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 8.0),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        child: AspectRatio(
-                                            aspectRatio: 1,
-                                            child: Image.file(
-                                              file,
-                                              fit: BoxFit.cover,
-                                            )),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
+                              child: ListView(
+                                // This next line does the trick.
+                                scrollDirection: Axis.horizontal,
+                                children: images.map((file) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.only(right: 8.0),
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(8.0),
+                                      child: AspectRatio(
+                                          aspectRatio: 1,
+                                          child: Image.file(
+                                            file,
+                                            fit: BoxFit.cover,
+                                          )),
+                                    ),
+                                  );
+                                }).toList(),
                               ),
                             ),
                           ),
@@ -584,27 +580,25 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
                             padding: const EdgeInsets.only(top: 12.0),
                             child: SizedBox(
                               height: 150,
-                              child: Expanded(
-                                child: ListView(
-                                  // This next line does the trick.
-                                  scrollDirection: Axis.horizontal,
-                                  children: images.map((file) {
-                                    return Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 8.0),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        child: AspectRatio(
-                                            aspectRatio: 1,
-                                            child: Image.file(
-                                              file,
-                                              fit: BoxFit.cover,
-                                            )),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
+                              child: ListView(
+                                // This next line does the trick.
+                                scrollDirection: Axis.horizontal,
+                                children: images.map((file) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.only(right: 8.0),
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(8.0),
+                                      child: AspectRatio(
+                                          aspectRatio: 1,
+                                          child: Image.file(
+                                            file,
+                                            fit: BoxFit.cover,
+                                          )),
+                                    ),
+                                  );
+                                }).toList(),
                               ),
                             ),
                           ),
@@ -682,27 +676,25 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
                             padding: const EdgeInsets.only(top: 12.0),
                             child: SizedBox(
                               height: 150,
-                              child: Expanded(
-                                child: ListView(
-                                  // This next line does the trick.
-                                  scrollDirection: Axis.horizontal,
-                                  children: images.map((file) {
-                                    return Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 8.0),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        child: AspectRatio(
-                                            aspectRatio: 1,
-                                            child: Image.file(
-                                              file,
-                                              fit: BoxFit.cover,
-                                            )),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
+                              child: ListView(
+                                // This next line does the trick.
+                                scrollDirection: Axis.horizontal,
+                                children: images.map((file) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.only(right: 8.0),
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.circular(8.0),
+                                      child: AspectRatio(
+                                          aspectRatio: 1,
+                                          child: Image.file(
+                                            file,
+                                            fit: BoxFit.cover,
+                                          )),
+                                    ),
+                                  );
+                                }).toList(),
                               ),
                             ),
                           ),
