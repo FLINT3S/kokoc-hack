@@ -54,6 +54,7 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
   TextEditingController durationController = TextEditingController();
   String? runIntensity;
   String? swimStyle;
+  String? strengthIntensity;
 
   void goToNextStep() {
     if (addActivityStep == 0) {
@@ -121,7 +122,8 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
 
         AutoRouter.of(context).navigateNamed('/');
       }
-    } else if (activityType == 'Плавание') {
+    }
+    else if (activityType == 'Плавание') {
       if (swimStyle == null ||
           durationController.value.text == '' ||
           int.tryParse(durationController.value.text)! <= 0) {
@@ -146,6 +148,39 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
           'burnedEnergy': burnedEnergy,
           'duration': int.tryParse(durationController.value.text),
           'swimStyle': swimStyle,
+          'images': images.map((i) => i.path).toList()
+        });
+
+        AutoRouter.of(context).navigateNamed('/');
+      }
+    }
+    else if (activityType == 'Силовые упражнения') {
+      if (strengthIntensity == null ||
+          durationController.value.text == '' ||
+          int.tryParse(durationController.value.text)! <= 0) {
+        showSnackBar('Заполните все поля тренировки!');
+      } else {
+        int met;
+        switch (strengthIntensity) {
+          case 'Лёгкая':
+            met = 3;
+          case 'Умеренная':
+            met = 4;
+          case 'Более интенсивная':
+            met = 5;
+          case 'Высокоинтенсивная':
+            met = 6;
+          default:
+            met = 5;
+        }
+        double durationHours =(int.tryParse(durationController.value.text)! / 60);
+        double burnedEnergy = durationHours * met * weight;
+
+        saveActivityToSP({
+          'type': 'strength',
+          'burnedEnergy': burnedEnergy,
+          'duration': int.tryParse(durationController.value.text),
+          'strengthIntensity': strengthIntensity,
           'images': images.map((i) => i.path).toList()
         });
 
@@ -453,44 +488,57 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
                           ),
                           const Padding(
                             padding: EdgeInsets.only(top: 32.0),
-                            child: Text('Интенсивность бега'),
+                            child: Text('Интенсивность тренировки'),
                           ),
                           ListTile(
-                              title: const Text('Умеренная (6-8 км/ч)'),
+                              title: const Text('Лёгкая'),
                               contentPadding: const EdgeInsets.symmetric(
                                   vertical: 0, horizontal: 0),
                               leading: Radio<String>(
-                                value: 'Умеренная (6-8 км/ч)',
-                                groupValue: runIntensity,
+                                value: 'Лёгкая',
+                                groupValue: strengthIntensity,
                                 onChanged: (String? value) {
                                   setState(() {
-                                    runIntensity = value;
+                                    strengthIntensity = value;
                                   });
                                 },
                               )),
                           ListTile(
-                              title: const Text('Выше среднего (9-13 км/ч)'),
+                              title: const Text('Умеренная'),
                               contentPadding: const EdgeInsets.symmetric(
                                   vertical: 0, horizontal: 0),
                               leading: Radio<String>(
-                                value: 'Выше среднего (9-13 км/ч)',
-                                groupValue: runIntensity,
+                                value: 'Умеренная',
+                                groupValue: strengthIntensity,
                                 onChanged: (String? value) {
                                   setState(() {
-                                    runIntensity = value;
+                                    strengthIntensity = value;
                                   });
                                 },
                               )),
                           ListTile(
-                              title: const Text('Высокая (более 13 км/ч)'),
+                              title: const Text('Более интенсивная'),
                               contentPadding: const EdgeInsets.symmetric(
                                   vertical: 0, horizontal: 0),
                               leading: Radio<String>(
-                                value: 'Высокая (более 13 км/ч)',
-                                groupValue: runIntensity,
+                                value: 'Более интенсивная',
+                                groupValue: strengthIntensity,
                                 onChanged: (String? value) {
                                   setState(() {
-                                    runIntensity = value;
+                                    strengthIntensity = value;
+                                  });
+                                },
+                              )),
+                          ListTile(
+                              title: const Text('Высокоинтенсивная'),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 0),
+                              leading: Radio<String>(
+                                value: 'Высокоинтенсивная',
+                                groupValue: strengthIntensity,
+                                onChanged: (String? value) {
+                                  setState(() {
+                                    strengthIntensity = value;
                                   });
                                 },
                               )),
