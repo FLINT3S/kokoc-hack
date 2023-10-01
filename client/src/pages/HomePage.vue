@@ -20,11 +20,15 @@
 
       <h3>Активность сотрудников</h3>
 
-      <n-data-table
-          :data="activitiesInCompany"
-          :columns="activitiesColumns"
-          :pagination="{pageSize: 10}"
-      />
+      <n-scrollbar x-scrollable>
+        <div class="scroll-container">
+          <n-data-table
+              :columns="activitiesColumns"
+              :data="activitiesInCompany"
+              :pagination="{pageSize: 10}"
+          />
+        </div>
+      </n-scrollbar>
     </div>
 
     <n-modal :show="isSettingsModalShown">
