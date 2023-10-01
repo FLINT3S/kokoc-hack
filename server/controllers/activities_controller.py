@@ -48,10 +48,10 @@ async def get_all_moderation(activity_request_id: int):
     return await activity_service.get_image_from_activity_request(activity_request_id)
 
 
-@activities_route.post("/moderate")
-async def moderate(activity_request_moderate_dto: ActivityRequestModerateDTO):
-    return await activity_service.moderate_activity_request(activity_request_moderate_dto.activity_request_id,
-                                                            activity_request_moderate_dto.status)
+# @activities_route.post("/moderate")
+# async def moderate(activity_request_moderate_dto: ActivityRequestModerateDTO):
+#     return await activity_service.moderate_activity_request(activity_request_moderate_dto.activity_request_id,
+#                                                             activity_request_moderate_dto.status)
 
 
 @activities_route.get("/get-employees-descending-list-in_company/{company_id}")

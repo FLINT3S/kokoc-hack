@@ -27,11 +27,34 @@ class ActivityService:
 
     async def create_activity_request(self, employee_id: int, training_information: str,
                                       adding_kilocalories_count: int, images: str):
-        activity_request = ActivityRequest(employee_id=employee_id, training_information=training_information,
-                                           adding_kilocalories_count=adding_kilocalories_count,
-                                           date=datetime.datetime.now(), images=images)
+        async with AsyncSession(self.database_service.engine) as session:
+            activity_request = ActivityRequest(employee_id=employee_id, training_information=training_information,
+                                               adding_kilocalories_count=adding_kilocalories_count,
+                                               date=datetime.datetime.now(), images=images)
 
-        return await self.database_service.save(activity_request)
+            employee_id = activity_request.employee_id
+            year = activity_request.date.year
+            month = activity_request.date.month
+
+            st = select(Activity) \
+                .where(Activity.employee_id == employee_id) \
+                .where(Activity.year_number == year) \
+                .where(Activity.month_number == month) \
+                .limit(1)
+            result = (await session.execute(st)).first()
+
+            activity = None
+            if result is not None:
+                activity = result[0]
+            else:
+                activity = Activity(employee_id=employee_id, kilocalories_count=0, year_number=year, month_number=month)
+
+            activity.kilocalories_count += activity_request.adding_kilocalories_count
+            session.add(activity)
+            await session.commit()
+            await session.refresh(activity)
+
+            return await self.database_service.save(activity_request)
 
     async def save_training_imamge(self, file):
         file_only_name = f'{uuid.uuid4().hex}' + file.filename
@@ -86,38 +109,6 @@ class ActivityService:
                 return result[0]
             else:
                 return Activity(employee_id=employee_id, kilocalories_count=0, year_number=year, month_number=month)
-
-    async def moderate_activity_request(self, activity_request_id: int, state: bool):
-        async with AsyncSession(self.database_service.engine) as session:
-            activity_request = await self.get_activity_request_by_id(activity_request_id)
-
-            employee_id = activity_request.employee_id
-            year = activity_request.date.year
-            month = activity_request.date.month
-
-            st = select(Activity) \
-                .where(Activity.employee_id == employee_id) \
-                .where(Activity.year_number == year) \
-                .where(Activity.month_number == month) \
-                .limit(1)
-            result = (await session.execute(st)).first()
-
-            activity = None
-            if result is not None:
-                activity = result[0]
-            else:
-                activity = Activity(employee_id=employee_id, kilocalories_count=0, year_number=year, month_number=month)
-
-            if state:
-                activity.kilocalories_count += activity_request.adding_kilocalories_count
-                session.add(activity)
-                await session.commit()
-                await session.refresh(activity)
-
-            await session.delete(activity_request)
-            await session.commit()
-
-        return {}
 
     async def get_employees_descending_list_in_company(self, company_id: int):
         async with AsyncSession(self.database_service.engine) as session:
