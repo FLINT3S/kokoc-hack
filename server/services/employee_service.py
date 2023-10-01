@@ -171,3 +171,13 @@ class EmployeeService:
             await session.refresh(employee)
 
             return employee
+
+    async def get_employee_by_id(self, employee_id):
+        async with AsyncSession(self.database_service.engine) as session:
+            st = select(Employee) \
+                .where(Employee.id == employee_id) \
+                .limit(1)
+            result = (await session.execute(st)).first()
+            employee = result[0]
+
+            return employee

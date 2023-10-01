@@ -18,6 +18,8 @@ from data.model.activity import Activity
 
 from data.model.step_activity import StepActivity
 
+from data.model.employee import Employee
+
 PATH = os.path.join(os.getcwd())
 
 
@@ -219,3 +221,13 @@ class ActivityService:
             await session.refresh(activity)
 
         return activity
+
+    async def get_activities_request_by_employee(self, employee_id):
+        async with AsyncSession(self.database_service.engine) as session:
+            st = select(Employee) \
+                .where(Employee.id == employee_id) \
+                .limit(1)
+            result = (await session.execute(st)).first()
+            employee = result[0]
+
+            return employee.activities_requests

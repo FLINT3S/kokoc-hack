@@ -60,3 +60,7 @@ async def get_employees_in_company(company_id: int):
 async def change_employee_anonymous(change_employee_anonymous_dto: ChangeEmployeeAnonymousDTO):
     return await employee_service.change_anonymous(employee_id=change_employee_anonymous_dto.employee_id,
                                                    anonymous=change_employee_anonymous_dto.anonymous)
+
+@employees_router.get("/get-employee-by-id/{employee_id}")
+async def get_employees_in_company(employee_id: int):
+    return await employee_service.get_employee_by_id(employee_id)

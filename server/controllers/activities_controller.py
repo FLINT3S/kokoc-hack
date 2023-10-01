@@ -75,3 +75,7 @@ async def get_employees_descending_list_in_company(activity_info: ActivityByDate
 async def get_employees_descending_list_in_company(activity_info: AddingCountStepsDTO):
     return await activity_service.add_steps(employee_id=activity_info.employee_id,
                                             count=activity_info.count, human_weight=activity_info.human_weight)
+
+@activities_route.get("/get-activities-request-by-employee/{employee_id}")
+async def get_all_moderation(employee_id: int):
+    return await activity_service.get_activities_request_by_employee(employee_id)
