@@ -22,7 +22,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
         'https://kokoc.flint3s.ru/api/activities/get-employees-descending-list-in_company/${sp.getInt('userCompanyId')!}');
 
     setState(() {
-      leaderBoardUsers.addAll(response.data);
+      leaderBoardUsers = List.from(response.data);
     });
   }
 
@@ -35,7 +35,12 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('Лидерборд'),
+        actions: [
+          IconButton(onPressed: loadLeaderboard, icon: const Icon(Icons.refresh))
+        ],
+      ),
       body: ListView(
           padding: EdgeInsets.symmetric(horizontal: 16),
           children: leaderBoardUsers.asMap().entries.map((e) {
