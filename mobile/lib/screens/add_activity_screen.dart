@@ -55,6 +55,7 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
   String? runIntensity;
   String? swimStyle;
   String? strengthIntensity;
+  String? bicycleIntensity;
 
   void goToNextStep() {
     if (addActivityStep == 0) {
@@ -181,6 +182,37 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
           'burnedEnergy': burnedEnergy,
           'duration': int.tryParse(durationController.value.text),
           'strengthIntensity': strengthIntensity,
+          'images': images.map((i) => i.path).toList()
+        });
+
+        AutoRouter.of(context).navigateNamed('/');
+      }
+    }
+    else if (activityType == 'Велосипед') {
+      if (bicycleIntensity == null ||
+          durationController.value.text == '' ||
+          int.tryParse(durationController.value.text)! <= 0) {
+        showSnackBar('Заполните все поля тренировки!');
+      } else {
+        int met;
+        switch (bicycleIntensity) {
+          case 'Умеренная езда (10-15 км/ч)':
+            met = 5;
+          case 'Быстрая езда (15-25 км/ч)':
+            met = 7;
+          case 'Соревновательная езда (более 25 км/ч)':
+            met = 9;
+          default:
+            met = 7;
+        }
+        double durationHours =(int.tryParse(durationController.value.text)! / 60);
+        double burnedEnergy = durationHours * met * weight;
+
+        saveActivityToSP({
+          'type': 'bicycle',
+          'burnedEnergy': burnedEnergy,
+          'duration': int.tryParse(durationController.value.text),
+          'bicycleIntensity': bicycleIntensity,
           'images': images.map((i) => i.path).toList()
         });
 
@@ -599,44 +631,44 @@ class _AddActivityScreenState extends State<AddActivityScreen> {
                           ),
                           const Padding(
                             padding: EdgeInsets.only(top: 32.0),
-                            child: Text('Интенсивность бега'),
+                            child: Text('Интенсивность езды'),
                           ),
                           ListTile(
-                              title: const Text('Умеренная (6-8 км/ч)'),
+                              title: const Text('Умеренная езда (10-15 км/ч)'),
                               contentPadding: const EdgeInsets.symmetric(
                                   vertical: 0, horizontal: 0),
                               leading: Radio<String>(
-                                value: 'Умеренная (6-8 км/ч)',
-                                groupValue: runIntensity,
+                                value: 'Умеренная езда (10-15 км/ч)',
+                                groupValue: bicycleIntensity,
                                 onChanged: (String? value) {
                                   setState(() {
-                                    runIntensity = value;
+                                    bicycleIntensity = value;
                                   });
                                 },
                               )),
                           ListTile(
-                              title: const Text('Выше среднего (9-13 км/ч)'),
+                              title: const Text('Быстрая езда (15-25 км/ч)'),
                               contentPadding: const EdgeInsets.symmetric(
                                   vertical: 0, horizontal: 0),
                               leading: Radio<String>(
-                                value: 'Выше среднего (9-13 км/ч)',
-                                groupValue: runIntensity,
+                                value: 'Быстрая езда (15-25 км/ч)',
+                                groupValue: bicycleIntensity,
                                 onChanged: (String? value) {
                                   setState(() {
-                                    runIntensity = value;
+                                    bicycleIntensity = value;
                                   });
                                 },
                               )),
                           ListTile(
-                              title: const Text('Высокая (более 13 км/ч)'),
+                              title: const Text('Соревновательная езда (более 25 км/ч)'),
                               contentPadding: const EdgeInsets.symmetric(
                                   vertical: 0, horizontal: 0),
                               leading: Radio<String>(
-                                value: 'Высокая (более 13 км/ч)',
-                                groupValue: runIntensity,
+                                value: 'Соревновательная езда (более 25 км/ч)',
+                                groupValue: bicycleIntensity,
                                 onChanged: (String? value) {
                                   setState(() {
-                                    runIntensity = value;
+                                    bicycleIntensity = value;
                                   });
                                 },
                               )),
