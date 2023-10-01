@@ -38,6 +38,7 @@ class AuthService {
 
         if (employeeResponse.data?['employee'] != null) {
           sp.setInt('employeeId', employeeResponse.data?['employee']['id']!);
+          sp.setInt('userCompanyId', employeeResponse.data?['employee']['company_id']!);
         } else {
           sp.setBool('isSignedIn', false);
           sp.remove('authToken');

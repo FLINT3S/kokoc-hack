@@ -40,9 +40,13 @@ class _AccountScreenState extends State<AccountScreen> {
               const Center(
                 child: CircleAvatar(
                     radius: 100,
-                    child: Image(
-                        image: NetworkImage(
-                            'https://telegra.ph/file/3ca78eb15d1943fd2c9c1.png'))),
+                    child: ClipOval(
+                        child: AspectRatio(
+                            aspectRatio: 1,
+                            child: Image(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(
+                                    'https://s1.afisha.ru/mediastorage/02/68/50c66e7f825c4e82828ffaa96802.jpg'))))),
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 16),

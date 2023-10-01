@@ -163,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Column(children: [
                             Padding(
                               padding: EdgeInsets.only(bottom: 8.0),
-                              child: Text('Мои активности', textAlign: TextAlign.center, style: TextStyle(fontSize: 16),),
+                              child: Text('Мои активности', textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
                             ),
                             Row(
                               children: [
