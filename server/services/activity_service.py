@@ -23,12 +23,10 @@ class ActivityService:
 
     async def create_activity_request(self, employee_id: int, training_information: str,
                                       adding_kilocalories_count: int, file):
-        file_name = "/code/public/" + f'{uuid.uuid4().hex}' + '.jpg'
+        file_name = "/code/public/" + f'{uuid.uuid4().hex}' + file.filename
         try:
             im = Image.open(file.file)
-            if im.mode in ("RGBA", "P"):
-                im = im.convert("RGB")
-            im.save(file_name, 'JPEG', quality=50)
+            im.save(file_name)
         except Exception:
             raise HTTPException(status_code=500, detail='Что-то пошло не так')
         finally:
